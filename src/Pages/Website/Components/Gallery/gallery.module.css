@@ -1,0 +1,12 @@
+.cards {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #FFF;
+    margin: 10px auto 0 !important;
+    padding: 0 24px;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -ms-border-radius: 14px;
+    -o-border-radius: 14px;
+}

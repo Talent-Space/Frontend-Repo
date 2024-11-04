@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+.about {
+    background-color: #EBEBEB;
+}
+/* About */
+
+.about-landing {
+    max-height: calc(100vh - 88px);
+    background-color: rgba(121, 57, 255, 30%);
+}
+
+.about-info {
+    font-family: "Poppins", sans-serif;
+}
+
+
+.form-info {
+    font-family: "Poppins", sans-serif;
+}
+
+.about-form {
+    width: 100%;
+    max-width: 600px;
+    /* height: 550px; */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 60%);
+    transform: rotate(-3.82deg);
+    border-radius: 22px;
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    -ms-border-radius: 22px;
+    -o-border-radius: 22px;
+    -webkit-transform: rotate(-3.82deg);
+    -moz-transform: rotate(-3.82deg);
+    -ms-transform: rotate(-3.82deg);
+    -o-transform: rotate(-3.82deg);
+}
+
+
+.form-info p {
+    font-size: 14px;
+    color: rgba(18, 18, 18, 60%);
+}
+
+.about-form Form input {
+    width: 100%;
+    max-width: 340px;
+}
+
+.about-form Form button {
+    width: 100%;
+    border: none;
+    background-color: #7939FF;
+}
+
+.about-form Form button:hover {
+    background-color: #7839ffe8;
+}
+
+
+
+
+
+
+/* Responsive */
+@media (max-width: 1200px) {
+    nav {
+        padding: 16px 60px;
+    }
+}
+
+@media (max-width: 992px) {
+    .nav-links ul {
+        display: none !important;
+    }
+
+    .about-info {
+        max-width: 300px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .about {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-nav {
+        padding: 10px 20px;
+        height: auto;
+    }
+
+    .search-bar input {
+        max-width: 200px;
+    }
+    
+    .about-landing {
+        flex: 1;
+        height: auto;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .about-info {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .about-info h1 {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 24px;
+    }
+
+    .about-info p {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .about-form {
+        width: 100%;
+        max-width: 100%;
+        transform: none;
+        padding: 15px;
+    }
+
+    .about-form Form input,
+    .about-form Form textarea {
+        max-width: 100%;
+    }
+
+    .form-info h1 {
+        font-size: 22px;
+    }
+
+    .form-info p {
+        font-size: 14px;
+    }
+
+    .about-form Form textarea {
+        height: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+    .about {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-nav {
+        padding: 10px 15px;
+        height: auto;
+    }
+
+    .nav-container {
+        width: 100%;
+    }
+
+    .search-bar, .nav-links {
+        display: none;
+    }
+
+    .about-landing {
+        flex: 1;
+        height: auto;
+        padding: 15px;
+        overflow-y: auto;
+    }
+
+    .about-form {
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+        transform: none;
+        margin-top: 15px;
+    }
+
+    .about-form Form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-form Form input,
+    .about-form Form textarea {
+        max-width: 100%;
+    }
+
+    .about-info {
+        margin-bottom: 15px;
+    }
+
+    .about-info h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .about-info p {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .form-info h1 {
+        font-size: 20px;
+    }
+
+    .form-info p {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .about-form Form textarea {
+        height: 100px;
+    }
+}
