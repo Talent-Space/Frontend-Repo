@@ -1,8 +1,14 @@
+import { useState } from "react";
 import Gallery from "../Components/Gallery/Gallery";
 import WebsiteNavbar from "../Components/WebsiteNavbar/WebsiteNavbar";
 import styles from "./categories.module.css";
 
 export default function Categories() {
+
+  const [isOpen, setIsOpen] = useState(false);
+
+
+
   const liColor = (e) => {
     const allLi = document.querySelectorAll(`.${styles.talents} li`);
     allLi.forEach((item) => {
@@ -17,7 +23,7 @@ export default function Categories() {
   return (
     <>
       <div className={`${styles.categories}`}>
-        <WebsiteNavbar />
+        <WebsiteNavbar openSide={isOpen} />
         <div className={`${styles.categories} d-flex align-items-center gap-4`}>
           <div className={`${styles.leftSide}`}>
             <div className={`${styles.sidebar} d-flex align-items-center`}>

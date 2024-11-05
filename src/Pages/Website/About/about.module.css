@@ -6,7 +6,7 @@
 /* About */
 
 .about-landing {
-    max-height: calc(100vh - 88px);
+    height: 100vh;
     background-color: rgba(121, 57, 255, 30%);
 }
 
