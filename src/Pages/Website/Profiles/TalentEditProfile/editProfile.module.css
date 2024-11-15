@@ -1,26 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
-
-.categories {
+.editProfile {
     background-color: #EBEBEB;
     width: 100%;
     min-height: 100vh;
 }
 
-.leftSide {
-    width: fit-content;
-    transition: all 0.3s ease;
-}
-
-.content {
+.rightSide {
     margin-top: 100px;
-    margin-left: 270px;
-    width: calc(100% - 270px);
+    margin-left: 340px;
+    margin-right: 20px;
+    width: calc(100% - 340px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -ms-border-radius: 14px;
+    -o-border-radius: 14px;
 }
 
 @media (max-width: 768px) {
-    .content {
+    .rightSide {
         margin: 100px 20px 60px;
         width: 100%;
+    }
+
+    .bottomPart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
     }
 
     .hide {
@@ -36,7 +46,6 @@
         -ms-transform: translateX(1);
         -o-transform: translateX(1);
     }
-
 }
 
 @media (min-width: 1200px) {

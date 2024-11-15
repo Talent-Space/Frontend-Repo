@@ -1,0 +1,79 @@
+.sidebar {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    height: calc(100vh - 80px);
+    width: 300px;
+    border-radius: 0px 92px 0 0;
+    background-color: #FFF;
+    -webkit-border-radius: 0px 92px 0 0;
+    -moz-border-radius: 0px 92px 0 0;
+    -ms-border-radius: 0px 92px 0 0;
+    -o-border-radius: 0px 92px 0 0;
+}
+
+.topImage {
+    position: absolute;
+    top: -10px;
+}
+
+.topImage img {
+    width: 160px;
+}
+
+
+.bottomImage {
+    position: absolute;
+    bottom: -10px;
+}
+
+.talents {
+    list-style: none;
+    margin-left: 20px;
+}
+
+.talents li {
+    margin-top: 19px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    color: rgba(0, 0, 0, 70%);
+    font-family: "Poppins", sans-serif;
+}
+
+.talents li:before {
+    content: '';
+    position: absolute;
+    left: -54px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+}
+
+.talents li.activeLi:before {
+    content: '';
+    width: 6px;
+    height: 47px;
+    background-color: #7939FF;
+    border-radius: 0 10px 10px 0;
+    -webkit-border-radius: 0 10px 10px 0;
+    -moz-border-radius: 0 10px 10px 0;
+    -ms-border-radius: 0 10px 10px 0;
+    -o-border-radius: 0 10px 10px 0;
+}
+
+.logOut li:hover,
+.logOut:hover {
+    color: red !important;
+}
+
+.talents li:hover {
+    color: rgba(0, 0, 0, 50%);
+}

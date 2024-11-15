@@ -9,6 +9,8 @@ import CheckEmail from "./Pages/Auth/AuthOperations/CheckEmail/CheckEmail";
 import About from "./Pages/Website/About/About";
 import HomeInvestor from "./Pages/Website/HomeInvestor/HomeInvestor";
 import Categories from "./Pages/Website/Categories/Categories";
+import Profile from "./Pages/Website/Profiles/TalentProfile/Profile";
+import EditProfile from "./Pages/Website/Profiles/TalentEditProfile/EditProfile";
 
 function App() {
   return (
@@ -22,7 +24,12 @@ function App() {
 
 
         {/* Reduendent Pages */}
+        {/* Investor */}
         <Route path="/homeInvestor" element={<HomeInvestor />} />
+        {/* Talent */}
+        <Route path="/profileTalent" element={<Profile />} />
+        <Route path="/editProfileTalent" element={<EditProfile />} />
+
 
         {/* AuthOperations */}
         <Route path="login" element={<Login />} />

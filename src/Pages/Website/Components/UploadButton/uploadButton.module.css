@@ -1,0 +1,17 @@
+.upload {
+    width: 180px;
+    height: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.281);
+    background-color: #FFF;
+    border-radius: 44px;
+    -webkit-border-radius: 44px;
+    -moz-border-radius: 44px;
+    -ms-border-radius: 44px;
+    -o-border-radius: 44px;
+}
+
+.file-name {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333333;
+}

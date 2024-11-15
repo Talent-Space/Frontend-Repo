@@ -7,8 +7,10 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function WebsiteNavbar(props) {
+
   return (
     <>
       <nav className={`${styles["web-nav"]}`}>
@@ -16,10 +18,15 @@ export default function WebsiteNavbar(props) {
           <div
             className={`d-flex align-items-center justify-content-center gap-5`}
             style={{ position: "relative" }}>
-            <div className={`${styles.bars}`}>
-              <FontAwesomeIcon icon={faBars} style={{ cursor: "pointer" }} />
-            </div>
-            <div className={`d-flex align-items-center justify-content-between gap-5`}>
+            {props.screen ? (
+              <div className={`${styles.bars}`} onClick={props.onToggleSidebar}>
+                <FontAwesomeIcon icon={faBars} style={{ cursor: "pointer" }} />
+              </div>
+            ) : (
+              ""
+            )}
+            <div
+              className={`d-flex align-items-center justify-content-between gap-5`}>
               <h1 className={`${styles.logo} fw-bold`}>
                 <span
                   className="fw-bold"
@@ -60,7 +67,7 @@ export default function WebsiteNavbar(props) {
                   <Link>
                     <FontAwesomeIcon icon={faBell} />
                   </Link>
-                  <Link>
+                  <Link to={"/profileTalent"}>
                     <FontAwesomeIcon icon={faCircleUser} />
                   </Link>
                 </div>

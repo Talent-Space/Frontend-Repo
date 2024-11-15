@@ -1,8 +1,10 @@
 import styles from "./homePage.module.css";
 import WebsiteNavbar from "../Components/WebsiteNavbar/WebsiteNavbar";
 import Gallery from "../Components/Gallery/Gallery";
+import { useState } from "react";
 
 export default function HomePage() {
+
   return (
     <>
       <div className={`${styles.home}`}>
