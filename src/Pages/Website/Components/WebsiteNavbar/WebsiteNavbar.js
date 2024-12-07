@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 export default function WebsiteNavbar(props) {
-
   return (
     <>
       <nav className={`${styles["web-nav"]}`}>
@@ -27,14 +26,16 @@ export default function WebsiteNavbar(props) {
             )}
             <div
               className={`d-flex align-items-center justify-content-between gap-5`}>
-              <h1 className={`${styles.logo} fw-bold`}>
+              <Link
+                to={"/"}
+                className={`${styles.logo} cursor-pointer fw-bold`}>
                 <span
                   className="fw-bold"
                   style={{ color: "#7939FF", fontSize: "16px" }}>
                   Talents
                 </span>
-                Space
-              </h1>
+                <span className={`${styles.space}`} style={{ color: "black" }}>Space</span>
+              </Link>
 
               <div className={`${styles["search-bar"]}`}>
                 <input

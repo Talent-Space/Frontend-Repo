@@ -2,21 +2,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./uploadButton.module.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
-
-
 export default function ButtonUpload() {
+  const displayFileName = () => {
+    const input = document.getElementById("myfile");
+    const fileNameDisplay = document.getElementById("file-name");
 
-    const displayFileName = () => {
-        const input = document.getElementById("myfile");
-        const fileNameDisplay = document.getElementById("file-name");
-    
-        // Display the name of the selected file
-        if (input.files.length > 0) {
-          fileNameDisplay.textContent = `Selected File: ${input.files[0].name}`;
-        } else {
-          fileNameDisplay.textContent = "No file selected";
-        }
-      };
+    // Display the name of the selected file
+    if (input.files.length > 0) {
+      fileNameDisplay.textContent = `Selected File: ${input.files[0].name}`;
+    } else {
+      fileNameDisplay.textContent = "No file selected";
+    }
+  };
 
   return (
     <>
@@ -28,10 +25,6 @@ export default function ButtonUpload() {
           right: "25px",
           cursor: "pointer",
         }}>
-        <FontAwesomeIcon
-          icon={faUpload}
-          style={{ color: "#7939FF", marginRight: "10px", fontSize: "20px" }}
-        />
         <div>
           <input
             type="file"
@@ -45,7 +38,16 @@ export default function ButtonUpload() {
             for="myfile"
             className={`${styles["file-label"]}`}
             style={{ cursor: "pointer" }}>
-            Upload Files
+            <FontAwesomeIcon
+              icon={faUpload}
+              className={`${styles.icon}`}
+              style={{
+                color: "#7939FF",
+                marginRight: "10px",
+                fontSize: "20px",
+              }}
+            />
+            <span>Upload Files</span>
           </label>
 
           {/* <p  className={`${styles["file-name"]}`} id="file-name">

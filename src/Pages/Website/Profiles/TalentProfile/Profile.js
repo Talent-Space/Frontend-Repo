@@ -3,8 +3,8 @@ import SideBar from "../../Components/SideBar/SideBar";
 import WebsiteNavbar from "../../Components/WebsiteNavbar/WebsiteNavbar";
 import styles from "./profile.module.css";
 import Gallery from "../../Components/Gallery/Gallery";
-import { ReactComponent as SavedVideos } from "../../../../Assets/Images/videos.svg";
-import { ReactComponent as EditProfileImg } from "../../../../Assets/Images/EditProfile.svg";
+import { ReactComponent as SavedVideos } from "../../../../Assets/svgs/videos.svg";
+import { ReactComponent as EditProfileImg } from "../../../../Assets/svgs/EditProfile.svg";
 import ButtonUpload from "../../Components/UploadButton/ButtonUpload";
 import UserInfo from "../../Components/UserInfo/UserInfo";
 

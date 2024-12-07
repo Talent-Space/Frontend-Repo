@@ -7,6 +7,8 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "../../../../Components/Navbar/Navbar";
+import { ReactComponent as LoginImg } from "../../../../Assets/svgs/Login.svg";
+
 
 export default function NewPassword() {
   const [email, setEmail] = useState("");
@@ -170,10 +172,11 @@ export default function NewPassword() {
           </div>
 
           <div className={styles["right-side"]}>
-            <img
+            <LoginImg />
+            {/* <img
               src={require("../../../../Assets/Images/login.png")}
               alt="login-img"
-            />
+            /> */}
           </div>
         </div>
       </div>

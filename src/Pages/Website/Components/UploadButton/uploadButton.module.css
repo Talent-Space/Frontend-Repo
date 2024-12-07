@@ -10,8 +10,32 @@
     -o-border-radius: 44px;
 }
 
-.file-name {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #333333;
+@media (max-width: 768px) {
+    .upload {
+        width: 60px;
+        height: 60px;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 0px !important;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+    }
+
+    .file-label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .icon {
+        font-size: 35px !important;
+        margin: 0 8px auto;
+    }
+
+    .file-label span {
+        display: none !important;
+    }
 }

@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "../../../../Components/Navbar/Navbar";
+import { ReactComponent as LoginImg } from "../../../../Assets/svgs/Login.svg";
+
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -224,10 +226,11 @@ export default function Register() {
           </div>
 
           <div className={styles["right-side"]}>
-            <img
+          <LoginImg />
+            {/* <img
               src={require("../../../../Assets/Images/login.png")}
               alt="login-img"
-            />
+            /> */}
           </div>
         </div>
       </div>

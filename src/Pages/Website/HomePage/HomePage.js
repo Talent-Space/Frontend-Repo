@@ -1,7 +1,9 @@
 import styles from "./homePage.module.css";
 import WebsiteNavbar from "../Components/WebsiteNavbar/WebsiteNavbar";
+import { ReactComponent as Landing } from "../../../Assets/svgs/landing.svg";
 import Gallery from "../Components/Gallery/Gallery";
 import { useState } from "react";
+
 
 export default function HomePage() {
 
@@ -35,11 +37,12 @@ export default function HomePage() {
             </div>
 
             <div className={`${styles["right-side"]} text-center`}>
-              <img
+              <Landing />
+              {/* <img
                 src={require("../../../Assets/Images/landing.png")}
                 alt="login-img"
                 className="img-fluid"
-              />
+              /> */}
             </div>
           </div>
         </div>
