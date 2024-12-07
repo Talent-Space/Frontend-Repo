@@ -30,7 +30,7 @@ export default function ButtonUpload() {
             type="file"
             id="myfile"
             name="myfile"
-            onchange={displayFileName}
+            onChange={displayFileName}
             className="d-none"
           />
 

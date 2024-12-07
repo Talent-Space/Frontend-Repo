@@ -2,21 +2,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./sidebar.module.css";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function SideBar(props) {
-  const liColor = (e) => {
-    const allLi = document.querySelectorAll(`.${styles.talents} li`);
-    allLi.forEach((item) => {
-      item.style.color = "";
-      item.classList.remove(styles.activeLi);
-    });
+  const [activeKey, setActiveKey] = useState(null);
 
-    e.target.style.color = "#7939FF";
-    e.target.classList.add(styles.activeLi);
+  const liColor = (key) => {
+    setActiveKey(key); 
   };
 
   const mapItems = Object.keys(props.items).map((key) => (
-    <li key={key} onClick={liColor} className="d-flex align-items-center">
+    <li
+      key={key}
+      onClick={() => liColor(key)} 
+      className={`d-flex align-items-center ${
+        activeKey === key ? styles.activeLi : ""
+      }`}
+      style={{ color: activeKey === key ? "#7939FF" : "" }}
+    >
       {props.items[key].icon && props.type === "user" ? (
         <span className="me-2">{props.items[key].icon}</span>
       ) : (
@@ -25,6 +28,8 @@ export default function SideBar(props) {
       {props.items[key].text || props.items[key]}
     </li>
   ));
+
+  // console.log(mapItems);
 
   return (
     <>

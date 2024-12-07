@@ -207,10 +207,6 @@ export default function Login() {
           {/* Image */}
           <div className={styles["right-side"]}>
             <LoginImg />
-            {/* <img
-              src={require("../../../../Assets/Images/login.png")}
-              alt="login-img"
-            /> */}
           </div>
         </div>
       </div>

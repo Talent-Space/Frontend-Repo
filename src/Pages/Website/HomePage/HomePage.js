@@ -2,7 +2,7 @@ import styles from "./homePage.module.css";
 import WebsiteNavbar from "../Components/WebsiteNavbar/WebsiteNavbar";
 import { ReactComponent as Landing } from "../../../Assets/svgs/landing.svg";
 import Gallery from "../Components/Gallery/Gallery";
-import { useState } from "react";
+// import { useState } from "react";
 
 
 export default function HomePage() {
