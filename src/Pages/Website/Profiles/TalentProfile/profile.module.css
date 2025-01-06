@@ -6,9 +6,10 @@
 
 .rightSide {
     margin-top: 100px;
-    margin-left: 340px;
+    margin-left: 10px;
     margin-right: 20px;
     width: calc(100% - 340px);
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;

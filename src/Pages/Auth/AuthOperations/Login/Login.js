@@ -8,11 +8,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "../../../../Components/Navbar/Navbar";
 import { ReactComponent as LoginImg } from "../../../../Assets/svgs/Login.svg";
+import Loading from "../../../../Components/Loading/Loading";
+import { LOGIN, baseURL } from "../../../../Api/Api";
+import axios from "axios";
+import Cookie from "cookie-universal";
 
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+
+  const [form, setForm] = useState({});
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Cookies
+  const cookie = Cookie();
+
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Required"),
@@ -31,47 +43,48 @@ export default function Login() {
     validateOnChange: true,
     validateOnBlur: true,
 
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit: (values) => { },
   });
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Email:", email);
-  //   console.log("Password:", password);
-  // };
+  const handleChange = (e) => {
+    // e.preventDefault();
+    formik.handleChange(e);
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  //Submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await axios.post(`${baseURL}/${LOGIN}`, {
+        email: formik.values.email,
+        password: formik.values.password,
+      });
+      setLoading(false);
+      const token = res.data.Token;
+      console.log(token);
+      cookie.set("talent-space", token);
+      window.location.pathname = "/";
+      // console.log(res);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      if (err.response.status === 401) {
+        setError(err.response.data.Message);
+      } else {
+        setError("Internal Server Error");
+      }
+    }
+  }
 
   return (
     <>
+      {loading ? <Loading /> : ""}
       <div className={styles.login}>
         {/* Navbar */}
-        {/* <nav
-          className={`${styles["navbar-login"]} d-flex align-items-center justify-content-between`}>
-          <h1
-            className={`${styles.logo} fw-bold`}
-            style={{ fontFamily: "Urbanist, sans-serif" }}>
-            <span
-              className="fw-bold"
-              style={{ color: "#7939FF", fontSize: "16px" }}>
-              Talents
-            </span>
-            Space
-          </h1>
-          <div className={styles["right-bar"]}>
-            <span style={{ color: "rgba(18, 18, 18, 0.6)" }}>
-              Don't have Account?
-            </span>
-            <Link
-              to={"/register"}
-              style={{ color: "#7939FF", fontWeight: "700" }}>
-              Apply Now
-            </Link>
-          </div>
-        </nav> */}
         <Navbar showRightBar={true} />
-
-        {/* <h1>Login Page</h1> */}
+        {/* Login Page */}
         <div
           className={`${styles.welcome} d-flex align-items-center justify-content-evenly`}
           style={{ backgroundColor: "#F6F6F6" }}>
@@ -87,7 +100,7 @@ export default function Login() {
                 </span>
                 Space
               </h1>
-              <p style={{ color: "#717171", fontSize: "18px" }}>
+              <p style={{ color: "#717171", fontSize: "18px", marginTop: "15px" }}>
                 with{" "}
                 <span style={{ color: "black", fontWeight: "bold" }}>
                   TalentSpace
@@ -96,7 +109,7 @@ export default function Login() {
                 acquainted.
               </p>
 
-              <Form onSubmit={formik.handleSubmit}>
+              <Form onSubmit={handleSubmit}>
                 <div className={styles["form-container"]}>
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
@@ -110,8 +123,9 @@ export default function Login() {
                       <Form.Control
                         type="email"
                         name="email"
+                        required
                         value={formik.values.email}
-                        onChange={formik.handleChange}
+                        onChange={handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Enter Your Email"
                         isInvalid={formik.touched.email && formik.errors.email}
@@ -138,8 +152,9 @@ export default function Login() {
                       <Form.Control
                         type="password"
                         name="password"
+                        required
                         value={formik.values.password}
-                        onChange={formik.handleChange}
+                        onChange={handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Password"
                         isInvalid={
@@ -177,6 +192,8 @@ export default function Login() {
                     type="submit">
                     Login
                   </Button>
+
+                  {error != "" ? <span className="text-danger">{error}</span> : ""}
 
                   <div className={styles.social}>
                     <span className={styles["social-info"]}>Or Login With</span>

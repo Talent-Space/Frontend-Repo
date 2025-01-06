@@ -24,13 +24,23 @@
   
   .navbar-login .right-bar {
     font-weight: 400;
-    font-size: 18px !important;
+    font-size: 18px;
     line-height: 27px;
   }
 
   @media (max-width: 992px) {
     .navbar-login {
       justify-content: center !important;
+    }
+    .right-bar {
+      font-size: 16px !important;
+      margin-left: 40px;
+    }
+  }
+  @media (max-width: 768px) {
+    .right-bar {
+      font-size: 16px !important;
+      margin-left: 40px;
     }
   }
 

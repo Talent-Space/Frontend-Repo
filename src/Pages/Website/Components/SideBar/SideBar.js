@@ -1,33 +1,63 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./sidebar.module.css";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
+import { LOGOUT, baseURL } from "../../../../Api/Api";
+import Cookie from "cookie-universal";
 
 export default function SideBar(props) {
+  const cookie = Cookie();
+
   const [activeKey, setActiveKey] = useState(null);
 
   const liColor = (key) => {
-    setActiveKey(key); 
+    setActiveKey(key);
   };
 
   const mapItems = Object.keys(props.items).map((key) => (
-    <li
-      key={key}
-      onClick={() => liColor(key)} 
-      className={`d-flex align-items-center ${
-        activeKey === key ? styles.activeLi : ""
-      }`}
-      style={{ color: activeKey === key ? "#7939FF" : "" }}
-    >
-      {props.items[key].icon && props.type === "user" ? (
-        <span className="me-2">{props.items[key].icon}</span>
-      ) : (
-        ""
-      )}
-      {props.items[key].text || props.items[key]}
-    </li>
+    <NavLink to={props.items[key].path} key={key}>
+      <li
+        key={key}
+        onClick={() => liColor(key)}
+        className={`d-flex align-items-center ${
+          activeKey === key ? styles.activeLi : ""
+        }`}
+        style={{ color: activeKey === key ? "#7939FF" : "" }}
+      >
+        {props.items[key].icon && props.type === "user" ? (
+          <span className="me-2">{props.items[key].icon}</span>
+        ) : (
+          ""
+        )}
+        {props.items[key].text || props.items[key]}
+      </li>
+    </NavLink>
   ));
+
+  const handleLogOut = async () => {
+    try {
+      const token = cookie.get("talent-space");
+      if (!token) {
+        console.error("Token is missing");
+        return;
+      }
+      const res = await axios.post(
+        `${baseURL}/${LOGOUT}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res);
+      window.location.pathname = "/login";
+    } catch (err) {
+      console.error("Error during logout:", err);
+    }
+  };
 
   // console.log(mapItems);
 
@@ -44,24 +74,25 @@ export default function SideBar(props) {
           {mapItems}
           {props.type === "user" ? (
             <>
-              <Link to={"/login"}>
-                <div
-                  className={`${styles.logOut} d-flex align-items-center justify-content-center mt-4`}
-                  style={{ cursor: "pointer", color: "rgba(0, 0, 0, 70%)" }}>
-                  <div className={`${styles.icon}`}>
-                    <FontAwesomeIcon
-                      icon={faRightFromBracket}
-                      style={{ marginTop: "20px", marginRight: "10px" }}
-                    />
-                  </div>
-                  <li
-                    style={{
-                      fontSize: "16px",
-                    }}>
-                    LogOut
-                  </li>
+              <button
+                onClick={handleLogOut}
+                className={`${styles.logOut} d-flex align-items-center justify-content-center mt-4`}
+                style={{ cursor: "pointer", color: "rgba(0, 0, 0, 70%)" }}
+              >
+                <div className={`${styles.icon}`}>
+                  <FontAwesomeIcon
+                    icon={faRightFromBracket}
+                    style={{ marginTop: "20px", marginRight: "10px" }}
+                  />
                 </div>
-              </Link>
+                <li
+                  style={{
+                    fontSize: "16px",
+                  }}
+                >
+                  LogOut
+                </li>
+              </button>
             </>
           ) : (
             ""

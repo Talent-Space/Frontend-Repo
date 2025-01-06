@@ -8,14 +8,22 @@ import Navbar from "../../../../Components/Navbar/Navbar";
 import { ReactComponent as LoginImg } from "../../../../Assets/svgs/Login.svg";
 import axios from "axios";
 import { REGISTER, baseURL } from "../../../../Api/Api";
+import Loading from "../../../../Components/Loading/Loading";
+import Cookie from "cookie-universal";
+
 
 export default function Register() {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
 
+  // States
   const [form, setForm] = useState({});
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Cookies
+  const cookie = Cookie();
 
   // console.log(form);
+  // console.log(formik.values);
 
   const registerSchema = Yup.object().shape({
     name: Yup.string()
@@ -49,38 +57,40 @@ export default function Register() {
     validateOnChange: true,
     validateOnBlur: true,
 
-    onSubmit: (values) => {
-      // console.log("Success", values);
-      // try {
-      //   axios.post(`${baseURL}/${REGISTER}`, values);
-      //   console.log("Success");
-      //   console.log(values);
-      // } catch (err) {
-      //   console.error(err);
-      // }
-    },
+    onSubmit: (values) => { },
   });
 
-  // console.log(formik.values);
 
   const handleChange = (e) => {
     // e.preventDefault();
     formik.handleChange(e);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+  //Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      await axios.post(`${baseURL}/${REGISTER}`, formik.values)
-      console.log("Success");
+      const res = await axios.post(`${baseURL}/${REGISTER}`, formik.values)
+      setLoading(false);
+      const token = res.data.Token;
+      console.log(token);
+      cookie.set("talent-space", token);
+      window.location.pathname = "/";
+      // console.log("Success");
     } catch (err) {
-      console.log(err);
+      setLoading(false);
+      if (err.response.status === 422) {
+        setError(err.response.data.message);
+      } else {
+        setError("Internal Server Error");
+      }
     }
   }
 
   return (
     <>
+      {loading ? <Loading /> : ""}
       <div className={styles.register}>
         {/* Navbar */}
         <Navbar showRightBar={false} />
@@ -104,10 +114,11 @@ export default function Register() {
                       <Form.Control
                         type="text"
                         name="name"
+                        required
                         value={formik.values.name}
                         onChange={handleChange}
                         onBlur={formik.handleBlur}
-                        placeholder="UserName"
+                        placeholder="User Name"
                         isInvalid={formik.touched.name && formik.errors.name}
                         isValid={formik.touched.name && !formik.errors.name}
                       />
@@ -131,6 +142,7 @@ export default function Register() {
                       <Form.Control
                         type="email"
                         name="email"
+                        required
                         value={formik.values.email}
                         onChange={handleChange}
                         onBlur={formik.handleBlur}
@@ -157,6 +169,7 @@ export default function Register() {
                       <Form.Control
                         type="password"
                         name="password"
+                        required
                         autoComplete="true"
                         value={formik.values.password}
                         onChange={handleChange}
@@ -191,6 +204,7 @@ export default function Register() {
                       <Form.Control
                         type="password"
                         name="password_confirmation"
+                        required
                         autoComplete="true"
                         value={formik.values.password_confirmation}
                         onChange={handleChange}
@@ -209,7 +223,7 @@ export default function Register() {
                     {formik.errors.password_confirmation ? (
                       <div className="text-danger m-0">
                         {formik.touched.password_confirmation &&
-                        formik.errors.password_confirmation
+                          formik.errors.password_confirmation
                           ? formik.errors.password_confirmation
                           : null}
                       </div>
@@ -223,6 +237,8 @@ export default function Register() {
                     type="submit">
                     Register
                   </Button>
+
+                  {error != "" ? <span className="text-danger">{error}</span> : ""}
 
                   <div className={styles.social}>
                     <span className={styles["social-info"]}>

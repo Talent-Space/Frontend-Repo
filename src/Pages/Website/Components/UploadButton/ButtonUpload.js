@@ -35,7 +35,7 @@ export default function ButtonUpload() {
           />
 
           <label
-            for="myfile"
+            htmlFor="myfile"
             className={`${styles["file-label"]}`}
             style={{ cursor: "pointer" }}>
             <FontAwesomeIcon

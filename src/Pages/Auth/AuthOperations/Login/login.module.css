@@ -173,9 +173,9 @@
     align-items: center;
   }
 
-  .welcome .welcome-title {
+  /* .welcome .welcome-title {
     text-align: center !important;
-  }
+  } */
 
   .left-side {
     width: 90%;
@@ -212,6 +212,7 @@
   .welcome .welcome-title {
     font-size: 36px;
     line-height: 43.2px;
+    text-align: center !important;
   }
 
   .form-custom input {
@@ -239,6 +240,7 @@
   .welcome .welcome-title {
     font-size: 28px;
     line-height: 33.6px;
+    text-align: center !important;
   }
 
   .social .social-login {

@@ -7,6 +7,7 @@ import { ReactComponent as SavedVideos } from "../../../../Assets/svgs/videos.sv
 import { ReactComponent as EditProfileImg } from "../../../../Assets/svgs/EditProfile.svg";
 import ButtonUpload from "../../Components/UploadButton/ButtonUpload";
 import UserInfo from "../../Components/UserInfo/UserInfo";
+import { Outlet } from "react-router-dom";
 
 export default function Profile() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -20,33 +21,33 @@ export default function Profile() {
   const itemsSidebar = {
     savedVideos: {
       text: "Saved Videos",
+      path: "savedVideos",
       icon: <SavedVideos />,
     },
     editProfile: {
       text: "Edit Profile",
+      path: "editProfileTalent",
       icon: <EditProfileImg />,
     },
   };
 
-  
-
   return (
     <>
-      <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
-      <div className={`${styles.profile} d-flex align-items-center gap-4`}>
-        <div
-          className={`${styles.leftSide} ${
-            showSidebar ? styles.show : styles.hide
-          }`}>
-          <SideBar items={itemsSidebar} type={user} />
+      <div className={`${styles.profile} position-relative`}>
+        <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
+        <div className="d-flex gap-1" style={{ marginTop: "80px" }}>
+          <div className={`${showSidebar ? styles.show : styles.hide}`}>
+            <SideBar items={itemsSidebar} type={user} />
+          </div>
+          <div
+            className={`${styles.rightSide}`}
+            style={{ backgroundColor: "#FFF" }}
+          >
+            <UserInfo />
+            <Gallery />
+          </div>
+          <ButtonUpload />
         </div>
-        <div
-          className={`${styles.rightSide}`}
-          style={{ backgroundColor: "#FFF" }}>
-          <UserInfo />
-          <Gallery />
-        </div>
-        <ButtonUpload />
       </div>
     </>
   );
