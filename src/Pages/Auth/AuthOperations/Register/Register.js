@@ -6,11 +6,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "../../../../Components/Navbar/Navbar";
 import { ReactComponent as LoginImg } from "../../../../Assets/svgs/Login.svg";
-
+import axios from "axios";
+import { REGISTER, baseURL } from "../../../../Api/Api";
 
 export default function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+
+  const [form, setForm] = useState({});
+
+  // console.log(form);
 
   const registerSchema = Yup.object().shape({
     name: Yup.string()
@@ -36,29 +41,49 @@ export default function Register() {
       name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      password_confirmation: "",
+      gender: "Male",
+      role: "Admin",
     },
     validationSchema: registerSchema,
     validateOnChange: true,
     validateOnBlur: true,
 
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      // console.log("Success", values);
+      // try {
+      //   axios.post(`${baseURL}/${REGISTER}`, values);
+      //   console.log("Success");
+      //   console.log(values);
+      // } catch (err) {
+      //   console.error(err);
+      // }
     },
   });
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Email:", email);
-  //   console.log("Password:", password);
-  // };
+  // console.log(formik.values);
+
+  const handleChange = (e) => {
+    // e.preventDefault();
+    formik.handleChange(e);
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${baseURL}/${REGISTER}`, formik.values)
+      console.log("Success");
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <>
       <div className={styles.register}>
         {/* Navbar */}
         <Navbar showRightBar={false} />
-
         {/* <h1>Login Page</h1> */}
         <div
           className={`${styles.welcome} d-flex align-items-center justify-content-evenly`}
@@ -70,7 +95,7 @@ export default function Register() {
                 Hello! Register to get started
               </h1>
 
-              <Form onSubmit={formik.handleSubmit}>
+              <Form onSubmit={handleSubmit}>
                 <div className={styles["form-container"]}>
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
@@ -80,7 +105,7 @@ export default function Register() {
                         type="text"
                         name="name"
                         value={formik.values.name}
-                        onChange={formik.handleChange}
+                        onChange={handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="UserName"
                         isInvalid={formik.touched.name && formik.errors.name}
@@ -107,7 +132,7 @@ export default function Register() {
                         type="email"
                         name="email"
                         value={formik.values.email}
-                        onChange={formik.handleChange}
+                        onChange={handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Enter Your Email"
                         isInvalid={formik.touched.email && formik.errors.email}
@@ -132,8 +157,9 @@ export default function Register() {
                       <Form.Control
                         type="password"
                         name="password"
+                        autoComplete="true"
                         value={formik.values.password}
-                        onChange={formik.handleChange}
+                        onChange={handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Password"
                         isInvalid={
@@ -164,26 +190,27 @@ export default function Register() {
                     <div className={styles["input-container"]}>
                       <Form.Control
                         type="password"
-                        name="confirmPassword"
-                        value={formik.values.confirmPassword}
-                        onChange={formik.handleChange}
+                        name="password_confirmation"
+                        autoComplete="true"
+                        value={formik.values.password_confirmation}
+                        onChange={handleChange}
                         onBlur={formik.handleBlur}
                         placeholder="Confirm Password"
                         isInvalid={
-                          formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword
+                          formik.touched.password_confirmation &&
+                          formik.errors.password_confirmation
                         }
                         isValid={
-                          formik.touched.confirmPassword &&
-                          !formik.errors.confirmPassword
+                          formik.touched.password_confirmation &&
+                          !formik.errors.password_confirmation
                         }
                       />
                     </div>
-                    {formik.errors.confirmPassword ? (
+                    {formik.errors.password_confirmation ? (
                       <div className="text-danger m-0">
-                        {formik.touched.confirmPassword &&
-                        formik.errors.confirmPassword
-                          ? formik.errors.confirmPassword
+                        {formik.touched.password_confirmation &&
+                        formik.errors.password_confirmation
+                          ? formik.errors.password_confirmation
                           : null}
                       </div>
                     ) : (
@@ -226,7 +253,7 @@ export default function Register() {
           </div>
 
           <div className={styles["right-side"]}>
-          <LoginImg />
+            <LoginImg />
           </div>
         </div>
       </div>

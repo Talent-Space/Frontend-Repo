@@ -9,6 +9,7 @@
   .navbar-login {
     height: 88px;
     padding: 16px 120px;
+    justify-content: space-between;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     background-color: #F6F6F6;
     font-family: "Urbanist", sans-serif;
@@ -26,3 +27,10 @@
     font-size: 18px !important;
     line-height: 27px;
   }
+
+  @media (max-width: 992px) {
+    .navbar-login {
+      justify-content: center !important;
+    }
+  }
+

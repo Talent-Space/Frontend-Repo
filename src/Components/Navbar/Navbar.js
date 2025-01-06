@@ -4,7 +4,7 @@ import styles from './navbar.module.css';
 
 const Navbar = (props) => {
   return (
-    <nav className={`${styles["navbar-login"]} d-flex align-items-center justify-content-between`}>
+    <nav className={`${styles["navbar-login"]} d-flex align-items-center`}>
       <h1 className={`${styles.logo} fw-bold`} style={{ fontFamily: "Urbanist, sans-serif" }}>
         <span className="fw-bold" style={{ color: "#7939FF", fontSize: "16px" }}>
           Talents
