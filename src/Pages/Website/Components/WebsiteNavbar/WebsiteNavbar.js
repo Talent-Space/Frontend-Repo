@@ -68,7 +68,7 @@ export default function WebsiteNavbar(props) {
                   <Link>
                     <FontAwesomeIcon icon={faBell} />
                   </Link>
-                  <Link to={"/profileTalent"}>
+                  <Link to={"/profile/my-profile"}>
                     <FontAwesomeIcon icon={faCircleUser} />
                   </Link>
                 </div>

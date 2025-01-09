@@ -1,14 +1,15 @@
-.editProfile {
+.profile {
     background-color: #EBEBEB;
     width: 100%;
     min-height: 100vh;
 }
 
-.rightSide {
-    margin-top: 100px;
-    margin-left: 340px;
+/* .rightSide {
+    margin-top: 10px;
+    margin-left: 10px;
     margin-right: 20px;
     width: calc(100% - 340px);
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -18,7 +19,9 @@
     -moz-border-radius: 14px;
     -ms-border-radius: 14px;
     -o-border-radius: 14px;
-}
+} */
+
+
 
 @media (max-width: 768px) {
     .rightSide {

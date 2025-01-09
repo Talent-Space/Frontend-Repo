@@ -1,16 +1,21 @@
-import { useState } from "react";
-import SideBar from "../../Components/SideBar/SideBar";
-import WebsiteNavbar from "../../Components/WebsiteNavbar/WebsiteNavbar";
 import styles from "./profile.module.css";
-import Gallery from "../../Components/Gallery/Gallery";
+import { useState } from "react";
+import SideBar from "../SideBar/SideBar";
+import WebsiteNavbar from "../WebsiteNavbar/WebsiteNavbar";
+import Gallery from "../Gallery/Gallery";
 import { ReactComponent as SavedVideos } from "../../../../Assets/svgs/videos.svg";
 import { ReactComponent as EditProfileImg } from "../../../../Assets/svgs/EditProfile.svg";
-import ButtonUpload from "../../Components/UploadButton/ButtonUpload";
-import UserInfo from "../../Components/UserInfo/UserInfo";
+import ButtonUpload from "../UploadButton/ButtonUpload";
+import UserInfo from "../UserInfo/UserInfo";
 import { Outlet } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark, faPenToSquare, faUser } from "@fortawesome/free-solid-svg-icons";
+
 
 export default function Profile() {
   const [showSidebar, setShowSidebar] = useState(false);
+  
+
   let screen = true;
   let user = "user";
 
@@ -19,17 +24,24 @@ export default function Profile() {
   };
 
   const itemsSidebar = {
+    myProfile: {
+      text: "My Profile",
+      path: "my-profile",
+      icon: <FontAwesomeIcon icon={faUser} />,
+    },
     savedVideos: {
       text: "Saved Videos",
-      path: "savedVideos",
-      icon: <SavedVideos />,
+      path: "saved-videos",
+      icon: <FontAwesomeIcon icon={faBookmark} />,
     },
     editProfile: {
       text: "Edit Profile",
-      path: "editProfileTalent",
-      icon: <EditProfileImg />,
+      path: "edit-profile-talent",
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
     },
   };
+
+  
 
   return (
     <>
@@ -39,13 +51,7 @@ export default function Profile() {
           <div className={`${showSidebar ? styles.show : styles.hide}`}>
             <SideBar items={itemsSidebar} type={user} />
           </div>
-          <div
-            className={`${styles.rightSide}`}
-            style={{ backgroundColor: "#FFF" }}
-          >
-            <UserInfo />
-            <Gallery />
-          </div>
+          <Outlet />
           <ButtonUpload />
         </div>
       </div>

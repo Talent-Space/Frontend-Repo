@@ -1,11 +1,5 @@
-.profile {
-    background-color: #EBEBEB;
-    width: 100%;
-    min-height: 100vh;
-}
-
 .rightSide {
-    margin-top: 100px;
+    margin-top: 10px;
     margin-left: 10px;
     margin-right: 20px;
     width: calc(100% - 340px);
@@ -21,11 +15,9 @@
     -o-border-radius: 14px;
 }
 
-
-
 @media (max-width: 768px) {
     .rightSide {
-        margin: 100px 20px 60px;
+        margin: 10px 20px 60px;
         width: 100%;
     }
 
@@ -52,15 +44,6 @@
 }
 
 @media (min-width: 1200px) {
-    .leftSide {
-        display: block !important;
-        transform: translateX(1) !important;
-        -webkit-transform: translateX(1) !important;
-        -moz-transform: translateX(1) !important;
-        -ms-transform: translateX(1) !important;
-        -o-transform: translateX(1) !important;
-}
-
     .bars {
         display: none !important;
     }

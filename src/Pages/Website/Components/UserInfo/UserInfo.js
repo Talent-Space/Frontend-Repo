@@ -2,8 +2,27 @@ import styles from "./userInfo.module.css";
 import { ReactComponent as Avatar } from "../../../../Assets/svgs/Avatar.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { baseURL, USER } from "../../../../Api/Api";
+import Cookie from "cookie-universal";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function UserInfo() {
+  const [userData, setUserData] = useState({});
+  const cookie = Cookie();
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/${USER}`, {
+        headers: {
+          Authorization: `Bearer ${cookie.get("talent-space")}`,
+        },
+      })
+      .then((res) => setUserData(res.data));
+  }, []);
+
+  console.log(userData);
+
   return (
     <>
       <div className={`${styles.profileInfo} row mb-4`}>
@@ -14,8 +33,8 @@ export default function UserInfo() {
         </div>
         <div className={`${styles.info} col-md-9 d-flex align-items-center justify-content-evenly`}>
           <div className={`${styles.bottomPart}`}>
-            <h2>Mohamed Hassen</h2>
-            <p style={{ color: "#969696", fontSize: "20px" }}>Description</p>
+            <h2>{userData.name}</h2>
+            <p style={{ color: "#969696", fontSize: "20px" }}>{userData.role}</p>
             <button
               className="btn mb-3"
               style={{

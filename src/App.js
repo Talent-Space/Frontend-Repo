@@ -9,11 +9,14 @@ import CheckEmail from "./Pages/Auth/AuthOperations/CheckEmail/CheckEmail";
 import About from "./Pages/Website/About/About";
 import HomeInvestor from "./Pages/Website/HomeInvestor/HomeInvestor";
 import Categories from "./Pages/Website/Categories/Categories";
-import Profile from "./Pages/Website/Profiles/TalentProfile/Profile";
-import EditProfile from "./Pages/Website/Profiles/TalentEditProfile/EditProfile";
+import EditProfile from "./Pages/Website/Profiles/Talent/EditProfile/EditProfile";
 import Users from "./Pages/Website/Admin/Dashboard/Users/Users";
 import RequireAuth from "./Pages/Auth/AuthOperations/RequireAuth/RequireAuth";
 import Dashboard from "./Pages/Website/Admin/Dashboard/Dashboard";
+import MyProfile from "./Pages/Website/Profiles/Talent/TalentProfile/MyProfile";
+import SavedVideos from "./Pages/Website/Components/SavedVideos/SavedVideos";
+import Profile from "./Pages/Website/Components/Profile/Profile"
+
 
 function App() {
   return (
@@ -37,8 +40,10 @@ function App() {
           <Route path="/homeInvestor" element={<HomeInvestor />} />
 
           {/* Talent */}
-          <Route path="/profileTalent" element={<Profile />}>
-            <Route path="editProfileTalent" element={<EditProfile />} />
+          <Route path="/profile" element={<Profile />}>
+            <Route path="my-profile" element={<MyProfile />} />
+            <Route path="saved-videos" element={<SavedVideos />} />
+            <Route path="edit-profile-talent" element={<EditProfile />} />
           </Route>
 
           {/* Admin */}
