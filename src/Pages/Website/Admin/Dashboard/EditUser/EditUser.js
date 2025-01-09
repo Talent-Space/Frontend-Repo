@@ -21,7 +21,10 @@ export default function EditUser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await Axios.put(`${USERS}/${id}`, {name: name, email: email});
+      const res = await Axios.put(`${USERS}/${id}`, {
+        name: name,
+        email: email,
+      });
       window.location.pathname = "/dashboard/users";
     } catch (err) {
       console.log(err);
