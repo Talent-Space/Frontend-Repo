@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { LOGOUT, baseURL } from "../../../../Api/Api";
 import Cookie from "cookie-universal";
+import { Axios } from "../../../../Api/Axios";
 
 export default function SideBar(props) {
   const cookie = Cookie();
@@ -43,15 +44,7 @@ export default function SideBar(props) {
         console.error("Token is missing");
         return;
       }
-      const res = await axios.post(
-        `${baseURL}/${LOGOUT}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await Axios.post(`/${LOGOUT}`);
       console.log(res);
       window.location.pathname = "/login";
     } catch (err) {

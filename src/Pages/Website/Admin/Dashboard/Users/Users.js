@@ -1,12 +1,12 @@
 import styles from "./users.module.css";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { USER, USERS, baseURL } from "../../../../../Api/Api";
+import { USER, USERS } from "../../../../../Api/Api";
 import Cookie from "cookie-universal";
 import { Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { Axios } from "../../../../../Api/Axios";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -15,12 +15,7 @@ export default function Users() {
 
   // Get Current User
   useEffect(() => {
-    axios
-      .get(`${baseURL}/${USER}`, {
-        headers: {
-          Authorization: `Bearer ${cookie.get("talent-space")}`,
-        },
-      })
+    Axios.get(`/${USER}`)
       .then((res) => {
         setCurrentUser(res.data);
       })
@@ -33,12 +28,7 @@ export default function Users() {
 
   // Get All Users
   useEffect(() => {
-    axios
-      .get(`${baseURL}/${USERS}`, {
-        headers: {
-          Authorization: `Bearer ${cookie.get("talent-space")}`,
-        },
-      })
+    Axios.get(`/${USERS}`)
       .then((res) => {
         setUsers(res.data);
       })
@@ -51,11 +41,7 @@ export default function Users() {
   const handleDelete = async (id) => {
     console.log(id);
     try {
-      const res = await axios.delete(`${baseURL}/${USERS}/${id}`, {
-        headers: {
-          Authorization: `Bearer ${cookie.get("talent-space")}`,
-        },
-      });
+      const res = await Axios.delete(`/${USERS}/${id}`);
       setUsers((prev) => prev.filter((item) => item.id !== id));
     } catch (err) {
       console.log(err);
@@ -72,14 +58,15 @@ export default function Users() {
         <td className="text-center">{user.role}</td>
         <td style={{ textAlign: "center" }}>
           <div className="d-flex align-items-center justify-content-center gap-2">
-            <Link to={"/"}>
+            <Link to={`${user.id}`}>
               <FontAwesomeIcon
                 fontSize={"19px"}
-                // color="blue" 
+                // color="blue"
                 icon={faPenToSquare}
               />
             </Link>
-            {currentUser.name !== user.name && currentUser.role !== user.role ? (
+            {currentUser.name !== user.name &&
+            currentUser.role !== user.role ? (
               <FontAwesomeIcon
                 onClick={() => handleDelete(user.id)}
                 fontSize={"19px"}
@@ -97,9 +84,9 @@ export default function Users() {
 
   return (
     <>
-      <div className={`${styles.users} bg-white`}>
+      <div className={`${styles.users} bg-white mt-2`}>
         <h1>Users Page</h1>
-        <Table striped bordered hover>
+        <Table striped bordered hover className="p-3 mt-2">
           <thead>
             <tr>
               <th>Id</th>

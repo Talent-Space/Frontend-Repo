@@ -22,8 +22,8 @@ export default function Dashboard() {
       icon: <SavedVideos />, // Update the icon to the correct SVG
     },
     editUsers: {
-      text: "Edit User",
-      path: "edit-user",
+      text: "Add User",
+      path: "add-user",
       icon: <EditProfileImg />, // Update the icon to the correct SVG
     },
   };
