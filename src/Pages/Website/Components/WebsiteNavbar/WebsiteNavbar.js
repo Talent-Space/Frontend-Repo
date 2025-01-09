@@ -12,6 +12,7 @@ import { useState } from "react";
 export default function WebsiteNavbar(props) {
   return (
     <>
+    {/* <span>Test</span> */}
       <nav className={`${styles["web-nav"]}`}>
         <div className={`${styles["nav-container"]}`}>
           <div
