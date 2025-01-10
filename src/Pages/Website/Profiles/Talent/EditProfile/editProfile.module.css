@@ -15,6 +15,17 @@
     -o-border-radius: 14px;
 }
 
+.item {
+    margin-top: 4px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.item:hover {
+    background-color: rgba(190, 209, 255, 0.628);
+    transition: 0.4s;
+}
+
 @media (max-width: 768px) {
     .rightSide {
         margin: 10px 20px 60px;

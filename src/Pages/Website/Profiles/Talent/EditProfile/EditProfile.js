@@ -52,7 +52,7 @@ export default function EditProfile() {
               {settings.map((setting, index) => (
                 <ListGroupItem
                   key={index}
-                  className="d-flex justify-content-between align-items-center py-3 border-bottom"
+                  className={`${styles.item} d-flex justify-content-between align-items-center py-3 border-bottom`}
                 >
                   <span
                     className={`${styles.setting}`}
@@ -62,7 +62,7 @@ export default function EditProfile() {
                   </span>
                   <FontAwesomeIcon
                     icon={faChevronRight}
-                    size="16"
+                    size="1x"
                     color="#939196"
                   />
                 </ListGroupItem>
