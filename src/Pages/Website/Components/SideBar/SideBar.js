@@ -45,7 +45,7 @@ export default function SideBar(props) {
         return;
       }
       const res = await Axios.post(`/${LOGOUT}`);
-      console.log(res);
+      // console.log(res);
       window.location.pathname = "/login";
     } catch (err) {
       console.error("Error during logout:", err);

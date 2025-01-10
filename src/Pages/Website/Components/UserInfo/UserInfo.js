@@ -15,7 +15,7 @@ export default function UserInfo() {
     Axios.get(`/${USER}`).then((res) => setUserData(res.data));
   }, []);
 
-  console.log(userData);
+  // console.log(userData);
 
   return (
     <>
