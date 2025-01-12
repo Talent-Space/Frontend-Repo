@@ -3,7 +3,7 @@ import styles from "./login.module.css";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "../../../../Components/Navbar/Navbar";
@@ -21,6 +21,7 @@ export default function Login() {
   const [form, setForm] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Cookies
   const cookie = Cookie();
@@ -150,7 +151,7 @@ export default function Login() {
                     <div className={styles["input-container"]}>
                       <FontAwesomeIcon className={styles.icon} icon={faLock} />
                       <Form.Control
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         required
                         value={formik.values.password}
@@ -163,6 +164,12 @@ export default function Login() {
                         isValid={
                           formik.touched.password && !formik.errors.password
                         }
+                      />
+                      <FontAwesomeIcon
+                        className={styles["eye-icon"]}
+                        icon={showPassword ? faEyeSlash : faEye}
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{ cursor: 'pointer', right: '10px', position: 'absolute' }}
                       />
                     </div>
                     {formik.errors.password ? (

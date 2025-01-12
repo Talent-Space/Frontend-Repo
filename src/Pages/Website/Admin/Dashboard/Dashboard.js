@@ -30,8 +30,8 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className={`${styles.dashboard} position-relative`}>
         <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
+      <div className={`${styles.dashboard} position-relative`}>
         <div className="d-flex gap-1" style={{ marginTop: "80px" }}>
           <div className={`${showSidebar ? styles.show : styles.hide}`}>
             <SideBar items={itemsSidebar} type={user} />

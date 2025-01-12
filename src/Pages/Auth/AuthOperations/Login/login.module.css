@@ -73,6 +73,14 @@
   transform: translateY(-50%);
 }
 
+.input-container .eye-icon {
+  position: absolute;
+  right: 35px !important;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .forget {
   float: right;
   text-decoration: underline !important;

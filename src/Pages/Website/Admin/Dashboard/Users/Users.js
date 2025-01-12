@@ -9,8 +9,10 @@ import { Link } from "react-router-dom";
 import { Axios } from "../../../../../Api/Axios";
 
 export default function Users() {
+  // States
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
+  const [noUsers, setNoUsers] = useState(false);
   const cookie = Cookie();
 
   // Get Current User
@@ -32,6 +34,7 @@ export default function Users() {
       .then((res) => {
         setUsers(res.data);
       })
+      .then(() => setNoUsers(true))
       .catch((err) => {
         console.log(err);
       });
@@ -48,6 +51,7 @@ export default function Users() {
     }
   };
 
+  // Mapping for All Users
   const usersShow = users
     .sort((a, b) => a.role.localeCompare(b.role))
     .map((user, key) => (
@@ -84,20 +88,38 @@ export default function Users() {
 
   return (
     <>
-      <div className={`${styles.users} bg-white mt-2`}>
+      <div className={`${styles.rightSide} bg-white mt-2`}>
         <h1>Users Page</h1>
-        <Table striped bordered hover className="p-3 mt-2">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th className="text-center">Name</th>
-              <th className="text-center">Email</th>
-              <th className="text-center">Role</th>
-              <th className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>{usersShow}</tbody>
-        </Table>
+        <div className={`${styles.users}`}>
+          <Table striped bordered hover className="p-3 mt-2">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th className="text-center">Name</th>
+                <th className="text-center">Email</th>
+                <th className="text-center">Role</th>
+                <th className="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usersShow.length === 0 ? (
+                <tr>
+                  <td colSpan={12} className="text-center">
+                    Loading...
+                  </td>
+                </tr>
+              ) : usersShow.length <= 1 && noUsers ? (
+                <tr>
+                  <td colSpan={12} className="text-center">
+                    No Users Found
+                  </td>
+                </tr>
+              ) : (
+                usersShow
+              )}
+            </tbody>
+          </Table>
+        </div>
       </div>
     </>
   );
