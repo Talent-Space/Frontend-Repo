@@ -1,38 +1,25 @@
+import styles from "./adduser.module.css";
 import { useEffect, useState } from "react";
-import styles from "./edituser.module.css";
 import { Button, Form } from "react-bootstrap";
 import { Axios } from "../../../../../Api/Axios";
-import { USER, USERS } from "../../../../../Api/Api";
+import { REGISTER, USER, USERS } from "../../../../../Api/Api";
 import Loading from "../../../../../Components/Loading/Loading";
 
-export default function EditUser() {
+export default function AddUser() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
-
-  // Id
-  const id = Number(window.location.pathname.replace("/dashboard/users/", ""));
-
-  // Get Data To Display
-  useEffect(() => {
-    Axios.get(`/${USERS}/${id}`)
-      .then((data) => {
-        setName(data.data.name);
-        setEmail(data.data.email);
-        setRole(data.data.role);
-      })
-      .then(() => setDisable(false));
-  }, []);
 
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
-      const res = await Axios.put(`${USERS}/${id}`, {
+      const res = await Axios.put(`${USERS}/add`, { // There is UnComplete API
         name: name,
         email: email,
+        password: password,
         role: role,
       });
       setLoading(false);
@@ -71,13 +58,23 @@ export default function EditUser() {
             />
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              value={password}
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formBasicSelect">
             <Form.Label>Role</Form.Label>
-            <Form.Select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option disabled value={""}>Select Role</option>
+            <Form.Select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option disabled value={""}>
+                Select Role
+              </option>
               <option value={"Admin"}>Admin</option>
               <option value={"Mentor"}>Mentor</option>
               <option value={"Talent"}>Talent</option>
@@ -85,7 +82,7 @@ export default function EditUser() {
             </Form.Select>
           </Form.Group>
 
-          <Button disabled={disable} className="btn btn-primary" type="submit">
+          <Button className="btn btn-primary" type="submit">
             Save
           </Button>
         </Form>

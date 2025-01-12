@@ -11,7 +11,7 @@ import { Axios } from "../../../../../Api/Axios";
 export default function Users() {
   // States
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState("");
   const [noUsers, setNoUsers] = useState(false);
   const cookie = Cookie();
 
@@ -26,7 +26,7 @@ export default function Users() {
       });
   }, []);
 
-  // console.log(users)
+  // console.log(currentUser);
 
   // Get All Users
   useEffect(() => {
@@ -52,7 +52,8 @@ export default function Users() {
   };
 
   // Mapping for All Users
-  const usersShow = users
+  const usersFilter = users.filter((user) => user.id !== currentUser.id);
+  const usersShow = usersFilter
     .sort((a, b) => a.role.localeCompare(b.role))
     .map((user, key) => (
       <tr key={key}>
@@ -89,7 +90,10 @@ export default function Users() {
   return (
     <>
       <div className={`${styles.rightSide} bg-white mt-2`}>
-        <h1>Users Page</h1>
+        <div className="d-flex align-items-center justify-content-between">
+          <h1>Users Page</h1>
+          <Link className="btn btn-primary" to={"/dashboard/user/add-user"}>Add User</Link>
+        </div>
         <div className={`${styles.users}`}>
           <Table striped bordered hover className="p-3 mt-2">
             <thead>
@@ -102,7 +106,7 @@ export default function Users() {
               </tr>
             </thead>
             <tbody>
-              {usersShow.length === 0 ? (
+              {users.length === 0 ? (
                 <tr>
                   <td colSpan={12} className="text-center">
                     Loading...

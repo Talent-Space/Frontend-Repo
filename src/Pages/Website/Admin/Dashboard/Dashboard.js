@@ -5,6 +5,8 @@ import SideBar from "../../Components/SideBar/SideBar";
 import { useState } from "react";
 import { ReactComponent as SavedVideos } from "../../../../Assets/svgs/videos.svg";
 import { ReactComponent as EditProfileImg } from "../../../../Assets/svgs/EditProfile.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashboard() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -19,12 +21,12 @@ export default function Dashboard() {
     users: {
       text: "Users",
       path: "users",
-      icon: <SavedVideos />, // Update the icon to the correct SVG
+      icon: <FontAwesomeIcon icon={faUsers} />,
     },
-    editUsers: {
+    addUser: {
       text: "Add User",
-      path: "add-user",
-      icon: <EditProfileImg />, // Update the icon to the correct SVG
+      path: "user/add-user",
+      icon: <FontAwesomeIcon icon={faUserPlus} />,
     },
   };
 

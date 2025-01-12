@@ -17,6 +17,7 @@ import MyProfile from "./Pages/Website/Profiles/Talent/TalentProfile/MyProfile";
 import SavedVideos from "./Pages/Website/Components/SavedVideos/SavedVideos";
 import Profile from "./Pages/Website/Components/Profile/Profile"
 import EditUser from "./Pages/Website/Admin/Dashboard/EditUser/EditUser";
+import AddUser from "./Pages/Website/Admin/Dashboard/AddUser/AddUser";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
           {/* Admin */}
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="users" element={<Users />} />
+            <Route path="user/add-user" element={<AddUser />} />
             <Route path="users/:id" element={<EditUser />} />
           </Route>
         </Route>
