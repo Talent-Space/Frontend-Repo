@@ -16,7 +16,7 @@ export default function AddUser() {
     setLoading(true);
     e.preventDefault();
     try {
-      const res = await Axios.put(`${USERS}/add`, { // There is UnComplete API
+      const res = await Axios.put(`${USERS}/users`, { // There is UnComplete API
         name: name,
         email: email,
         password: password,

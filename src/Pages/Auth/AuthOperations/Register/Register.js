@@ -1,6 +1,6 @@
 import styles from "./register.module.css";
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Dropdown, DropdownButton, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -11,9 +11,7 @@ import { REGISTER, baseURL } from "../../../../Api/Api";
 import Loading from "../../../../Components/Loading/Loading";
 import Cookie from "cookie-universal";
 
-
 export default function Register() {
-
   // States
   const [form, setForm] = useState({});
   const [error, setError] = useState("");
@@ -23,13 +21,12 @@ export default function Register() {
   const cookie = Cookie();
 
   // console.log(form);
-  // console.log(formik.values);
-
+  
   const registerSchema = Yup.object().shape({
     name: Yup.string()
-      .min(3, "Too Short!")
-      .max(40, "Too Long!")
-      .required("Name is Required"),
+    .min(3, "Too Short!")
+    .max(40, "Too Long!")
+    .required("Name is Required"),
     email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string()
       .matches(
@@ -39,27 +36,27 @@ export default function Register() {
       .min(2, "Too Short!")
       .max(50, "Too Long!")
       .required("Password is Required"),
-    confirmPassword: Yup.string()
+      confirmPassword: Yup.string()
       .required("Please Retype Password")
       .oneOf([Yup.ref("password")], "Password doesn't match"),
-  });
+    });
 
-  const formik = useFormik({
-    initialValues: {
+    const formik = useFormik({
+      initialValues: {
       name: "",
       email: "",
       password: "",
       password_confirmation: "",
-      gender: "Male",
-      role: "Admin",
+      gender: "",
+      role: "",
     },
     validationSchema: registerSchema,
     validateOnChange: true,
     validateOnBlur: true,
-
-    onSubmit: (values) => { },
+    
+    onSubmit: (values) => {},
   });
-
+  console.log(formik.values);
 
   const handleChange = (e) => {
     // e.preventDefault();
@@ -71,7 +68,7 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${baseURL}/${REGISTER}`, formik.values)
+      const res = await axios.post(`${baseURL}/${REGISTER}`, formik.values);
       setLoading(false);
       const token = res.data.Token;
       console.log(token);
@@ -79,6 +76,7 @@ export default function Register() {
       window.location.pathname = "/";
       // console.log("Success");
     } catch (err) {
+      console.log(err.response);
       setLoading(false);
       if (err.response.status === 422) {
         setError(err.response.data.message);
@@ -86,7 +84,7 @@ export default function Register() {
         setError("Internal Server Error");
       }
     }
-  }
+  };
 
   return (
     <>
@@ -97,9 +95,11 @@ export default function Register() {
         {/* <h1>Login Page</h1> */}
         <div
           className={`${styles.welcome} d-flex align-items-center justify-content-evenly`}
-          style={{ backgroundColor: "#F6F6F6" }}>
+          style={{ backgroundColor: "#F6F6F6" }}
+        >
           <div
-            className={`${styles["left-side"]} d-flex align-items-center justify-content-center`}>
+            className={`${styles["left-side"]} d-flex align-items-center justify-content-center`}
+          >
             <div className={styles["form-parts"]}>
               <h1 className={styles["form-title"]}>
                 Hello! Register to get started
@@ -109,7 +109,8 @@ export default function Register() {
                 <div className={styles["form-container"]}>
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
-                    controlId="name">
+                    controlId="name"
+                  >
                     <div className={styles["input-container"]}>
                       <Form.Control
                         type="text"
@@ -137,7 +138,8 @@ export default function Register() {
 
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
-                    controlId="formBasicEmail">
+                    controlId="formBasicEmail"
+                  >
                     <div className={styles["input-container"]}>
                       <Form.Control
                         type="email"
@@ -164,7 +166,8 @@ export default function Register() {
 
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
-                    controlId="formBasicPassword">
+                    controlId="formBasicPassword"
+                  >
                     <div className={styles["input-container"]}>
                       <Form.Control
                         type="password"
@@ -199,7 +202,8 @@ export default function Register() {
 
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
-                    controlId="formBasicConfirmPassword">
+                    controlId="formBasicConfirmPassword"
+                  >
                     <div className={styles["input-container"]}>
                       <Form.Control
                         type="password"
@@ -223,7 +227,7 @@ export default function Register() {
                     {formik.errors.password_confirmation ? (
                       <div className="text-danger m-0">
                         {formik.touched.password_confirmation &&
-                          formik.errors.password_confirmation
+                        formik.errors.password_confirmation
                           ? formik.errors.password_confirmation
                           : null}
                       </div>
@@ -232,13 +236,102 @@ export default function Register() {
                     )}
                   </Form.Group>
 
+                  <DropdownButton
+                    id="dropdown-item-button"
+                    title={formik.values.role || "Select Your Role"}
+                    className="mt-3"
+                    variant="white"
+                    color="white"
+                    style={{
+                      backgroundColor: "#EBEBEB",
+                      border: "none",
+                      width: "150px",
+                      borderRadius: "6px",
+                    }}
+                  >
+                    <Dropdown.ItemText
+                      style={{
+                        backgroundColor: "#7939FF",
+                        color: "white",
+                      }}
+                    >
+                      Our Roles
+                    </Dropdown.ItemText>
+                    <Dropdown.Item
+                      as="button"
+                      type="button"
+                      className={styles.dropdownItem}
+                      onClick={() => formik.setFieldValue('role', 'Talent')}
+                    >
+                      Talent
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as="button"
+                      type="button"
+                      className={styles.dropdownItem}
+                      onClick={() => formik.setFieldValue('role', 'Mentor')}
+                    >
+                      Mentor
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      as="button"
+                      type="button"
+                      className={styles.dropdownItem}
+                      onClick={() => formik.setFieldValue('role', 'Investor')}
+                    >
+                      Investor
+                    </Dropdown.Item>
+                  </DropdownButton>
+
+                  <div className={styles.buttonWrap}>
+                    <p className="mt-2">Select Gender:</p>
+                    <div>
+                      <input
+                        type="radio"
+                        name="gender"
+                        id="male"
+                        value="male"
+                        checked={formik.values.gender === "Male"}
+                        onChange={() => formik.setFieldValue("gender", "Male")}
+                        className={styles.hidden}
+                      />
+                      <label 
+                        htmlFor="male" 
+                        className={`${styles.buttonLabel} ${formik.values.gender === "male" ? styles.selected : ""}`}
+                      >
+                        <h1>Male</h1>
+                      </label>
+
+                      <input
+                        type="radio"
+                        name="gender"
+                        id="female"
+                        value="female"
+                        checked={formik.values.gender === "female"}
+                        onChange={() => formik.setFieldValue("gender", "Female")}
+                        className={styles.hidden}
+                      />
+                      <label 
+                        htmlFor="female" 
+                        className={`${styles.buttonLabel} ${formik.values.gender === "female" ? styles.selected : ""}`}
+                      >
+                        <h1>Female</h1>
+                      </label>
+                    </div>
+                  </div>
+
                   <Button
                     className={`${styles.submit} btn w-100 mt-4`}
-                    type="submit">
+                    type="submit"
+                  >
                     Register
                   </Button>
 
-                  {error != "" ? <span className="text-danger">{error}</span> : ""}
+                  {error != "" ? (
+                    <span className="text-danger">{error}</span>
+                  ) : (
+                    ""
+                  )}
 
                   <div className={styles.social}>
                     <span className={styles["social-info"]}>
@@ -246,7 +339,8 @@ export default function Register() {
                     </span>
                     <div className="d-flex align-items-center justify-content-center gap-5">
                       <Link
-                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}>
+                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
+                      >
                         <img
                           // width={"50px"}
                           src={require("../../../../Assets/Images/facebook.png")}
@@ -254,7 +348,8 @@ export default function Register() {
                         />
                       </Link>
                       <Link
-                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}>
+                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
+                      >
                         <img
                           // width={"50px"}
                           src={require("../../../../Assets/Images/google.png")}
