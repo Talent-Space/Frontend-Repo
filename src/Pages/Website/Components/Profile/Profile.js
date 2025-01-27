@@ -17,7 +17,7 @@ export default function Profile() {
   
 
   let screen = true;
-  let user = "user";
+  let user = ["Talent"];
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);

@@ -64,7 +64,7 @@ export default function Login() {
       });
       setLoading(false);
       const token = res.data.Token;
-      console.log(token);
+      // console.log(token);
       cookie.set("talent-space", token);
       window.location.pathname = "/";
       // console.log(res);

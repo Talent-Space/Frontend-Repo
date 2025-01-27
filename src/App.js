@@ -15,10 +15,11 @@ import RequireAuth from "./Pages/Auth/AuthOperations/RequireAuth/RequireAuth";
 import Dashboard from "./Pages/Website/Admin/Dashboard/Dashboard";
 import MyProfile from "./Pages/Website/Profiles/Talent/TalentProfile/MyProfile";
 import SavedVideos from "./Pages/Website/Components/SavedVideos/SavedVideos";
-import Profile from "./Pages/Website/Components/Profile/Profile"
+import Profile from "./Pages/Website/Components/Profile/Profile";
 import EditUser from "./Pages/Website/Admin/Dashboard/EditUser/EditUser";
 import AddUser from "./Pages/Website/Admin/Dashboard/AddUser/AddUser";
-
+import ForbiddenPage from "./Pages/Auth/403/ForbiddenPage";
+import MentorProfile from "./Pages/Website/Profiles/Mentor/MentorProfile";
 
 function App() {
   return (
@@ -31,28 +32,45 @@ function App() {
         <Route path="newPassword" element={<NewPassword />} />
         <Route path="checkEmail" element={<CheckEmail />} />
 
-        <Route element={<RequireAuth />}>
-          {/* Main Website Pages */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/categories" element={<Categories />} />
+        {/* Main Website Pages */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/categories" element={<Categories />} />
 
-          {/* Reduendent Pages */}
-          {/* Investor */}
-          <Route path="/homeInvestor" element={<HomeInvestor />} />
+        {/* Reduendent Pages */}
 
-          {/* Talent */}
+        {/* Investor */}
+        <Route path="/homeInvestor" element={<HomeInvestor />} />
+
+        {/* Mentor */}
+        {/* <Route path="/profile" element={<Profile />}>
+            <Route path="mentor" element={<MentorProfile />} />
+          </Route> */}
+
+        {/* Talent */}
+        <Route element={<RequireAuth allowedRole={["Talent", "Mentor"]} />}>
           <Route path="/profile" element={<Profile />}>
-            <Route path="my-profile" element={<MyProfile />} />
-            <Route path="saved-videos" element={<SavedVideos />} />
-            <Route path="edit-profile-talent" element={<EditProfile />} />
+            <Route element={<RequireAuth allowedRole={["Talent"]} />}>
+              <Route path="my-profile" element={<MyProfile />} />
+              <Route path="saved-videos" element={<SavedVideos />} />
+              <Route path="edit-profile-talent" element={<EditProfile />} />
+            </Route>
+            <Route element={<RequireAuth allowedRole={["Mentor"]} />}>
+              <Route path="mentor" element={<MentorProfile />} />
+            </Route>
           </Route>
+        </Route>
 
-          {/* Admin */}
+        {/* Admin */}
+
+        <Route element={<RequireAuth allowedRole={["Admin"]} />}>
           <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="users" element={<Users />} />
-            <Route path="user/add-user" element={<AddUser />} />
-            <Route path="users/:id" element={<EditUser />} />
+            <Route element={<RequireAuth allowedRole={"Admin"} />}>
+              <Route path="my-profile" element={<MyProfile />} />
+              <Route path="users" element={<Users />} />
+              <Route path="user/add-user" element={<AddUser />} />
+              <Route path="users/:id" element={<EditUser />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

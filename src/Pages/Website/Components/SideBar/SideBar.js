@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./sidebar.module.css";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Link, NavLink } from "react-router-dom";
-import { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { LOGOUT, baseURL } from "../../../../Api/Api";
+import { LOGOUT, USER, baseURL } from "../../../../Api/Api";
 import Cookie from "cookie-universal";
 import { Axios } from "../../../../Api/Axios";
 
@@ -12,6 +12,18 @@ export default function SideBar(props) {
   const cookie = Cookie();
 
   const [activeKey, setActiveKey] = useState(null);
+  const [user, setUser] = useState("");
+  const navigate = useNavigate();
+
+  //Get User
+  useEffect(() => {
+    Axios.get(`/${USER}`)
+      .then((res) => {
+        setUser(res.data);
+        // console.log(res.data.role);
+      })
+      .catch(() => navigate("/login", { replace: true }));
+  }, []);
 
   const liColor = (key) => {
     setActiveKey(key);
@@ -27,7 +39,7 @@ export default function SideBar(props) {
         }`}
         style={{ color: activeKey === key ? "#7939FF" : "" }}
       >
-        {props.items[key].icon && props.type === "user" ? (
+        {props.items[key].icon && props.type.includes(user.role) ? (
           <span className="me-2">{props.items[key].icon}</span>
         ) : (
           ""
@@ -45,6 +57,7 @@ export default function SideBar(props) {
         return;
       }
       const res = await Axios.post(`/${LOGOUT}`);
+      cookie.remove("talent-space");
       // console.log(res);
       window.location.pathname = "/login";
     } catch (err) {
@@ -65,7 +78,7 @@ export default function SideBar(props) {
         </div>
         <ul className={`${styles.talents}`}>
           {mapItems}
-          {props.type === "user" ? (
+          {props.type === "Admin" || "Talent" ? (
             <>
               <button
                 onClick={handleLogOut}
