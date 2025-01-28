@@ -6,7 +6,7 @@
   box-sizing: border-box;
 }
 
-main {
+.main {
   background-color: #313942;
   font-family: "Montserrat", sans-serif;
   align-items: center;
@@ -17,7 +17,7 @@ main {
   text-align: center;
 }
 
-h1 {
+.main h1 {
   color: #e7ebf2;
   font-size: 12.5rem;
   letter-spacing: 0.1em;
@@ -27,23 +27,23 @@ h1 {
 }
 
 @media (max-width: 30rem) {
-  h1 {
+  .main h1 {
     font-size: 8.5rem;
   }
 }
 
-h1 > span {
+.main h1 > span {
   animation: spooky 2s alternate infinite linear;
   color: #528cce;
   display: inline-block;
 }
 
-h2 {
+.main h2 {
   color: #e7ebf2;
   margin-bottom: 0.4em;
 }
 
-p {
+.main p {
   color: #ccc;
   margin-top: 0;
 }

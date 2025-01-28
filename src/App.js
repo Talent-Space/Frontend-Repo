@@ -20,17 +20,20 @@ import EditUser from "./Pages/Website/Admin/Dashboard/EditUser/EditUser";
 import AddUser from "./Pages/Website/Admin/Dashboard/AddUser/AddUser";
 import MentorProfile from "./Pages/Website/Profiles/Mentor/MentorProfile";
 import Err404 from "./Pages/Auth/404/Err404";
+import RequireBack from "./Pages/Auth/AuthOperations/RequireBack/RequireBack";
 
 function App() {
   return (
     <div className="App">
       <Routes>
         {/* AuthOperations */}
-        <Route index path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="resetPassword" element={<ResetPassword />} />
-        <Route path="newPassword" element={<NewPassword />} />
-        <Route path="checkEmail" element={<CheckEmail />} />
+        <Route element={<RequireBack />}>
+          <Route index path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="resetPassword" element={<ResetPassword />} />
+          <Route path="newPassword" element={<NewPassword />} />
+          <Route path="checkEmail" element={<CheckEmail />} />
+        </Route>
 
         {/* Main Website Pages */}
         <Route path="/" element={<HomePage />} />

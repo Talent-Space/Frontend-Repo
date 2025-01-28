@@ -9,7 +9,7 @@ import ForbiddenPage from "../../403/ForbiddenPage";
 export default function RequireAuth({ allowedRole }) {
   const cookie = Cookie();
   const token = cookie.get("talent-space");
-  console.log(allowedRole);
+  // console.log(allowedRole);
   const navigate = useNavigate();
 
   const [user, setUser] = useState("");
@@ -19,7 +19,6 @@ export default function RequireAuth({ allowedRole }) {
     Axios.get(`/${USER}`)
       .then((res) => {
         setUser(res.data);
-        console.log(res.data.role);
       })
       .catch(() => navigate("/login", { replace: true }));
   }, []);

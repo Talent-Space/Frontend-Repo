@@ -5,7 +5,7 @@ import { faGhost } from "@fortawesome/free-solid-svg-icons";
 export default function Err404() {
   return (
     <>
-      <main>
+      <div className={`${style.main}`}>
         <h1>
           4
           <span>
@@ -18,7 +18,7 @@ export default function Err404() {
         <Link className="d-block text-center btn btn-primary mt-4" to={"/"}>
           Return To Home Page
         </Link>
-      </main>
+      </div>
     </>
   );
 }

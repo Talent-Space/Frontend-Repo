@@ -3,7 +3,12 @@ import styles from "./login.module.css";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { faEnvelope, faLock, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faLock,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Navbar from "../../../../Components/Navbar/Navbar";
@@ -12,7 +17,6 @@ import Loading from "../../../../Components/Loading/Loading";
 import { LOGIN, baseURL } from "../../../../Api/Api";
 import axios from "axios";
 import Cookie from "cookie-universal";
-
 
 export default function Login() {
   // const [email, setEmail] = useState("");
@@ -25,7 +29,6 @@ export default function Login() {
 
   // Cookies
   const cookie = Cookie();
-
 
   const SignupSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Required"),
@@ -44,7 +47,7 @@ export default function Login() {
     validateOnChange: true,
     validateOnBlur: true,
 
-    onSubmit: (values) => { },
+    onSubmit: (values) => {},
   });
 
   const handleChange = (e) => {
@@ -64,9 +67,10 @@ export default function Login() {
       });
       setLoading(false);
       const token = res.data.Token;
-      // console.log(token);
+      const role = res.data.User.role;
+      const go = role === "Admin" ? "/dashboard/users" : "/";
       cookie.set("talent-space", token);
-      window.location.pathname = "/";
+      window.location.pathname = `${go}`;
       // console.log(res);
     } catch (err) {
       console.log(err);
@@ -77,7 +81,7 @@ export default function Login() {
         setError("Internal Server Error");
       }
     }
-  }
+  };
 
   return (
     <>
@@ -88,20 +92,29 @@ export default function Login() {
         {/* Login Page */}
         <div
           className={`${styles.welcome} d-flex align-items-center justify-content-evenly`}
-          style={{ backgroundColor: "#F6F6F6" }}>
+          style={{ backgroundColor: "#F6F6F6" }}
+        >
           <div
-            className={`${styles["left-side"]} d-flex align-items-center justify-content-center`}>
+            className={`${styles["left-side"]} d-flex align-items-center justify-content-center`}
+          >
             <div className={styles["form-parts"]}>
               <h1 className={styles["welcome-title"]}>
                 Welcome to
                 <span
                   className={styles["spacific-logo"]}
-                  style={{ color: "#7939FF" }}>
+                  style={{ color: "#7939FF" }}
+                >
                   Talents
                 </span>
                 Space
               </h1>
-              <p style={{ color: "#717171", fontSize: "18px", marginTop: "15px" }}>
+              <p
+                style={{
+                  color: "#717171",
+                  fontSize: "18px",
+                  marginTop: "15px",
+                }}
+              >
                 with{" "}
                 <span style={{ color: "black", fontWeight: "bold" }}>
                   TalentSpace
@@ -114,7 +127,8 @@ export default function Login() {
                 <div className={styles["form-container"]}>
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
-                    controlId="formBasicEmail">
+                    controlId="formBasicEmail"
+                  >
                     <Form.Label>Email</Form.Label>
                     <div className={styles["input-container"]}>
                       <FontAwesomeIcon
@@ -146,7 +160,8 @@ export default function Login() {
 
                   <Form.Group
                     className={`${styles["form-custom"]} mt-3`}
-                    controlId="formBasicPassword">
+                    controlId="formBasicPassword"
+                  >
                     <Form.Label>Password</Form.Label>
                     <div className={styles["input-container"]}>
                       <FontAwesomeIcon className={styles.icon} icon={faLock} />
@@ -169,7 +184,11 @@ export default function Login() {
                         className={styles["eye-icon"]}
                         icon={showPassword ? faEyeSlash : faEye}
                         onClick={() => setShowPassword(!showPassword)}
-                        style={{ cursor: 'pointer', right: '10px', position: 'absolute' }}
+                        style={{
+                          cursor: "pointer",
+                          right: "10px",
+                          position: "absolute",
+                        }}
                       />
                     </div>
                     {formik.errors.password ? (
@@ -190,23 +209,30 @@ export default function Login() {
                       display: "block",
                       color: "#6A707C",
                       fontSize: "12px",
-                    }}>
+                    }}
+                  >
                     Forgot Password
                   </Link>
 
                   <Button
                     className={`${styles.submit} btn w-100 mt-2`}
-                    type="submit">
+                    type="submit"
+                  >
                     Login
                   </Button>
 
-                  {error != "" ? <span className="text-danger">{error}</span> : ""}
+                  {error != "" ? (
+                    <span className="text-danger">{error}</span>
+                  ) : (
+                    ""
+                  )}
 
                   <div className={styles.social}>
                     <span className={styles["social-info"]}>Or Login With</span>
                     <div className="d-flex align-items-center justify-content-center gap-5">
                       <Link
-                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}>
+                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
+                      >
                         <img
                           // width={"50px"}
                           src={require("../../../../Assets/Images/facebook.png")}
@@ -214,7 +240,8 @@ export default function Login() {
                         />
                       </Link>
                       <Link
-                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}>
+                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
+                      >
                         <img
                           // width={"50px"}
                           src={require("../../../../Assets/Images/google.png")}
