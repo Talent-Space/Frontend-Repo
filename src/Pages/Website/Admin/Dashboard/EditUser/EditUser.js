@@ -4,6 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import { Axios } from "../../../../../Api/Axios";
 import { USER, USERS } from "../../../../../Api/Api";
 import Loading from "../../../../../Components/Loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 export default function EditUser() {
   const [name, setName] = useState("");
@@ -11,19 +12,25 @@ export default function EditUser() {
   const [role, setRole] = useState("");
   const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Id
   const id = Number(window.location.pathname.replace("/dashboard/users/", ""));
 
   // Get Data To Display
   useEffect(() => {
+    setLoading(true);
     Axios.get(`/${USERS}/${id}`)
       .then((data) => {
         setName(data.data.name);
         setEmail(data.data.email);
         setRole(data.data.role);
+        setLoading(false);
       })
-      .then(() => setDisable(false));
+      .then(() => setDisable(false))
+      .catch(() => {
+        navigate("/dashboard/users/page/404", { replace: true });
+      });
   }, []);
 
   const handleSubmit = async (e) => {
@@ -73,11 +80,10 @@ export default function EditUser() {
 
           <Form.Group className="mb-3" controlId="formBasicSelect">
             <Form.Label>Role</Form.Label>
-            <Form.Select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option disabled value={""}>Select Role</option>
+            <Form.Select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option disabled value={""}>
+                Select Role
+              </option>
               <option value={"Admin"}>Admin</option>
               <option value={"Mentor"}>Mentor</option>
               <option value={"Talent"}>Talent</option>

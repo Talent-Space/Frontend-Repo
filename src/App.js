@@ -18,15 +18,15 @@ import SavedVideos from "./Pages/Website/Components/SavedVideos/SavedVideos";
 import Profile from "./Pages/Website/Components/Profile/Profile";
 import EditUser from "./Pages/Website/Admin/Dashboard/EditUser/EditUser";
 import AddUser from "./Pages/Website/Admin/Dashboard/AddUser/AddUser";
-import ForbiddenPage from "./Pages/Auth/403/ForbiddenPage";
 import MentorProfile from "./Pages/Website/Profiles/Mentor/MentorProfile";
+import Err404 from "./Pages/Auth/404/Err404";
 
 function App() {
   return (
     <div className="App">
       <Routes>
         {/* AuthOperations */}
-        <Route path="login" element={<Login />} />
+        <Route index path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="resetPassword" element={<ResetPassword />} />
         <Route path="newPassword" element={<NewPassword />} />
@@ -36,16 +36,12 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
         <Route path="/categories" element={<Categories />} />
+        <Route path="/*" element={<Err404 />} />
 
         {/* Reduendent Pages */}
 
         {/* Investor */}
         <Route path="/homeInvestor" element={<HomeInvestor />} />
-
-        {/* Mentor */}
-        {/* <Route path="/profile" element={<Profile />}>
-            <Route path="mentor" element={<MentorProfile />} />
-          </Route> */}
 
         {/* Talent */}
         <Route element={<RequireAuth allowedRole={["Talent", "Mentor"]} />}>
