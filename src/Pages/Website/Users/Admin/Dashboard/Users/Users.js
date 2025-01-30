@@ -1,12 +1,12 @@
 import styles from "./users.module.css";
 import { useEffect, useState } from "react";
-import { USER, USERS } from "../../../../../Api/Api";
 import Cookie from "cookie-universal";
 import { Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { Axios } from "../../../../../Api/Axios";
+import { Axios } from "../../../../../../Api/Axios";
+import { USER, USERS } from "../../../../../../Api/Api";
 
 export default function Users() {
   // States

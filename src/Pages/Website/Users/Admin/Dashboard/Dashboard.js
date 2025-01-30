@@ -1,12 +1,10 @@
 import { Outlet } from "react-router-dom";
 import styles from "./dashboard.module.css";
-import WebsiteNavbar from "../../Components/WebsiteNavbar/WebsiteNavbar";
-import SideBar from "../../Components/SideBar/SideBar";
 import { useState } from "react";
-import { ReactComponent as SavedVideos } from "../../../../Assets/svgs/videos.svg";
-import { ReactComponent as EditProfileImg } from "../../../../Assets/svgs/EditProfile.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
+import SideBar from "../../../Components/SideBar/SideBar";
+import WebsiteNavbar from "../../../Components/WebsiteNavbar/WebsiteNavbar";
 
 export default function Dashboard() {
   const [showSidebar, setShowSidebar] = useState(false);

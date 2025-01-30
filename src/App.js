@@ -9,18 +9,18 @@ import CheckEmail from "./Pages/Auth/AuthOperations/CheckEmail/CheckEmail";
 import About from "./Pages/Website/About/About";
 import HomeInvestor from "./Pages/Website/HomeInvestor/HomeInvestor";
 import Categories from "./Pages/Website/Categories/Categories";
-import EditProfile from "./Pages/Website/Profiles/Talent/EditProfile/EditProfile";
-import Users from "./Pages/Website/Admin/Dashboard/Users/Users";
+import EditProfile from "./Pages/Website/Users/Talent/EditProfile/EditProfile";
 import RequireAuth from "./Pages/Auth/AuthOperations/RequireAuth/RequireAuth";
-import Dashboard from "./Pages/Website/Admin/Dashboard/Dashboard";
-import MyProfile from "./Pages/Website/Profiles/Talent/TalentProfile/MyProfile";
 import SavedVideos from "./Pages/Website/Components/SavedVideos/SavedVideos";
 import Profile from "./Pages/Website/Components/Profile/Profile";
-import EditUser from "./Pages/Website/Admin/Dashboard/EditUser/EditUser";
-import AddUser from "./Pages/Website/Admin/Dashboard/AddUser/AddUser";
-import MentorProfile from "./Pages/Website/Profiles/Mentor/MentorProfile";
+import MentorProfile from "./Pages/Website/Users/Mentor/MentorProfile";
 import Err404 from "./Pages/Auth/404/Err404";
 import RequireBack from "./Pages/Auth/AuthOperations/RequireBack/RequireBack";
+import AddUser from "./Pages/Website/Users/Admin/Dashboard/AddUser/AddUser";
+import EditUser from "./Pages/Website/Users/Admin/Dashboard/EditUser/EditUser";
+import Users from "./Pages/Website/Users/Admin/Dashboard/Users/Users";
+import Dashboard from "./Pages/Website/Users/Admin/Dashboard/Dashboard";
+import MyProfile from "./Pages/Website/Users/Talent/TalentProfile/MyProfile";
 
 function App() {
   return (
