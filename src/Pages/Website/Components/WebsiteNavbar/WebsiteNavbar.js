@@ -7,9 +7,25 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { USER } from "../../../../Api/Api";
+import { Axios } from "../../../../Api/Axios";
 
 export default function WebsiteNavbar(props) {
+
+  const [currentUser, setCurrentUser] = useState();
+
+  {/* Get current user data */}
+  useEffect(() => {
+    Axios.get(`/${USER}`)
+      .then((res) => {
+        setCurrentUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [])
+
   return (
     <>
     {/* <span>Test</span> */}
@@ -69,7 +85,8 @@ export default function WebsiteNavbar(props) {
                   <Link>
                     <FontAwesomeIcon icon={faBell} />
                   </Link>
-                  <Link to={"/profile/my-profile"}>
+                  
+                  <Link to={currentUser?.role === "Admin" ? "/dashboard/my-profile" : "/profile/my-profile"}>
                     <FontAwesomeIcon icon={faCircleUser} />
                   </Link>
                 </div>

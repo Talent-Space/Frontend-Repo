@@ -9,6 +9,9 @@
 .leftSide {
     width: fit-content;
     transition: all 0.3s ease;
+    position: absolute;
+    top: 70px;
+    height: calc(100vh - 70px);
 }
 
 .content {

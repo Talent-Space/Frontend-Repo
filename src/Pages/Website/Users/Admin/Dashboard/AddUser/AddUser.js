@@ -2,7 +2,7 @@ import styles from "./adduser.module.css";
 import {  useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Axios } from "../../../../../../Api/Axios";
-import { USERS } from "../../../../../../Api/Api";
+import { baseURL, USERS } from "../../../../../../Api/Api";
 import Loading from "../../../../../../Components/Loading/Loading";
 
 export default function AddUser() {
@@ -16,7 +16,7 @@ export default function AddUser() {
     setLoading(true);
     e.preventDefault();
     try {
-      const res = await Axios.put(`${USERS}/users`, {
+      const res = await Axios.post(`/users`, {
         name: name,
         email: email,
         password: password,

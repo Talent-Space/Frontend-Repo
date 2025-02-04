@@ -56,13 +56,14 @@ export default function Register() {
     
     onSubmit: (values) => {},
   });
-  console.log(formik.values);
+  // console.log(formik.values);
 
   const handleChange = (e) => {
     // e.preventDefault();
     formik.handleChange(e);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   //Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +72,7 @@ export default function Register() {
       const res = await axios.post(`${baseURL}/${REGISTER}`, formik.values);
       setLoading(false);
       const token = res.data.Token;
-      console.log(token);
+      // console.log(token);
       cookie.set("talent-space", token);
       window.location.pathname = "/";
       // console.log("Success");

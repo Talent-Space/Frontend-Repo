@@ -49,7 +49,7 @@ function App() {
         {/* Talent */}
         <Route element={<RequireAuth allowedRole={["Talent", "Mentor"]} />}>
           <Route path="/profile" element={<Profile />}>
-            <Route element={<RequireAuth allowedRole={["Talent"]} />}>
+            <Route element={<RequireAuth allowedRole={["Talent", "Mentor"]} />}>
               <Route path="my-profile" element={<MyProfile />} />
               <Route path="saved-videos" element={<SavedVideos />} />
               <Route path="edit-profile-talent" element={<EditProfile />} />
