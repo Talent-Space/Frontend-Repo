@@ -8,6 +8,8 @@ import WebsiteNavbar from "../../../Components/WebsiteNavbar/WebsiteNavbar";
 
 export default function Dashboard() {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [isLogout, setIsLogout] = useState(true);
+
   let screen = true;
   let user = ["Admin"];
 
@@ -42,7 +44,7 @@ export default function Dashboard() {
       <div className={`${styles.dashboard} position-relative`}>
         <div className="d-flex gap-1" style={{ marginTop: "80px" }}>
           <div className={`${showSidebar ? styles.show : styles.hide}`}>
-            <SideBar items={itemsSidebar} type={user} />
+            <SideBar items={itemsSidebar} type={user} logout={isLogout} />
           </div>
           <Outlet />
         </div>

@@ -16,7 +16,7 @@ export default function AddUser() {
     setLoading(true);
     e.preventDefault();
     try {
-      const res = await Axios.post(`/users`, {
+      const res = await Axios.post(`/users`, { // => Doesn't Work
         name: name,
         email: email,
         password: password,

@@ -9,12 +9,15 @@ import ButtonUpload from "../UploadButton/ButtonUpload";
 import UserInfo from "../UserInfo/UserInfo";
 import { Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faPenToSquare, faUser } from "@fortawesome/free-solid-svg-icons";
-
+import {
+  faBookmark,
+  faPenToSquare,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Profile() {
   const [showSidebar, setShowSidebar] = useState(false);
-  
+  const [isLogout, setIsLogout] = useState(true);
 
   let screen = true;
   let user = ["Talent"];
@@ -41,15 +44,13 @@ export default function Profile() {
     },
   };
 
-  
-
   return (
     <>
       <div className={`${styles.profile} position-relative`}>
         <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
         <div className="d-flex gap-1" style={{ marginTop: "80px" }}>
           <div className={`${showSidebar ? styles.show : styles.hide}`}>
-            <SideBar items={itemsSidebar} type={user} />
+            <SideBar items={itemsSidebar} type={user} logout={isLogout} />
           </div>
           <Outlet />
           <ButtonUpload />

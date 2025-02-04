@@ -23,6 +23,8 @@ import Dashboard from "./Pages/Website/Users/Admin/Dashboard/Dashboard";
 import MyProfile from "./Pages/Website/Users/Talent/TalentProfile/MyProfile";
 
 function App() {
+
+  
   return (
     <div className="App">
       <Routes>

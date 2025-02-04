@@ -30,17 +30,19 @@ export default function UserInfo() {
           className={`${styles.info} col-md-9 d-flex align-items-center justify-content-evenly`}
         >
           <div className={`${styles.bottomPart}`}>
-            <h2>{userData.name}</h2>
+            <h2>{userData.name?.charAt(0).toUpperCase() + userData.name?.slice(1)}</h2>
             <p style={{ color: "#969696", fontSize: "20px" }}>
               {userData.role}
             </p>
             <button
               className="btn mb-3"
+              disabled={userData.role === "Admin"}
               style={{
                 borderRadius: "15px",
                 backgroundColor: "#7939FF",
                 color: "#FFF",
                 width: "80px",
+                opacity: userData.role === "Admin" ? 0.6 : 1
               }}
             >
               Follow

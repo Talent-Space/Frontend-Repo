@@ -38,27 +38,6 @@ export default function Categories() {
         <div className={`${styles.categories} d-flex align-items-center gap-4`}>
           <div className={`${styles.leftSide} ${showSidebar ? styles.show : styles.hide}`}>
             <SideBar items={itemsSidebar} />
-            {/* <div className={`${styles.sidebar} d-flex align-items-center`}>
-              <div className={`${styles.topImage}`}>
-                <img
-                  src={require("../../../Assets/Images/Group 2.png")}
-                  alt="Top-Image"
-                />
-              </div>
-              <ul className={`${styles.talents}`}>
-                <li onClick={liColor}>Singing</li>
-                <li onClick={liColor}>Drawing</li>
-                <li onClick={liColor}>Photography</li>
-                <li onClick={liColor}>Acting</li>
-                <li onClick={liColor}>Writing</li>
-              </ul>
-              <div className={`${styles.bottomImage}`}>
-                <img
-                  src={require("../../../Assets/Images/Group 3.png")}
-                  alt="Bottom-Image"
-                />
-              </div>
-            </div> */}
           </div>
           <div className={`${styles.content}`}>
             <Gallery />

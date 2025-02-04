@@ -80,25 +80,29 @@ export default function SideBar(props) {
           {mapItems}
           {props.type === "Admin" || "Talent" ? (
             <>
-              <button
-                onClick={handleLogOut}
-                className={`${styles.logOut} d-flex align-items-center justify-content-center mt-4`}
-                style={{ cursor: "pointer", color: "rgba(0, 0, 0, 70%)" }}
-              >
-                <div className={`${styles.icon}`}>
-                  <FontAwesomeIcon
-                    icon={faRightFromBracket}
-                    style={{ marginTop: "20px", marginRight: "10px" }}
-                  />
-                </div>
-                <li
-                  style={{
-                    fontSize: "16px",
-                  }}
+              {props.logout === true ? (
+                <button
+                  onClick={handleLogOut}
+                  className={`${styles.logOut} d-flex align-items-center justify-content-center mt-4`}
+                  style={{ cursor: "pointer", color: "rgba(0, 0, 0, 70%)" }}
                 >
-                  LogOut
-                </li>
-              </button>
+                  <div className={`${styles.icon}`}>
+                    <FontAwesomeIcon
+                      icon={faRightFromBracket}
+                      style={{ marginTop: "20px", marginRight: "10px" }}
+                    />
+                  </div>
+                  <li
+                    style={{
+                      fontSize: "16px",
+                    }}
+                  >
+                    LogOut
+                  </li>
+                </button>
+              ) : (
+                ""
+              )}
             </>
           ) : (
             ""
