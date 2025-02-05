@@ -2,13 +2,15 @@ import styles from "./adduser.module.css";
 import {  useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Axios } from "../../../../../../Api/Axios";
-import { baseURL, USERS } from "../../../../../../Api/Api";
 import Loading from "../../../../../../Components/Loading/Loading";
+import { USERS } from "../../../../../../Api/Api";
 
 export default function AddUser() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [gender, setGender] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -16,12 +18,12 @@ export default function AddUser() {
     setLoading(true);
     e.preventDefault();
     try {
-      const res = await Axios.post(`/users`, {
+      const res = await Axios.post(`/${USERS}`, {
         name: name,
         email: email,
         password: password,
-        password_confirmation: password,
-        gender: "Male",
+        password_confirmation: confirmPassword,
+        gender: gender,
         role: role,
       });
       setLoading(false);
@@ -71,7 +73,29 @@ export default function AddUser() {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicSelect">
+          <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control
+              value={confirmPassword}
+              required
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              type="password"
+              placeholder="Confirm Password"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicSelectGender">
+            <Form.Label>Gender</Form.Label>
+            <Form.Select value={gender} onChange={(e) => setGender(e.target.value)}>
+              <option disabled value={""}>
+                Select Gender
+              </option>
+              <option value={"Male"}>Male</option>
+              <option value={"Female"}>Female</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicSelectRole">
             <Form.Label>Role</Form.Label>
             <Form.Select value={role} onChange={(e) => setRole(e.target.value)}>
               <option disabled value={""}>
