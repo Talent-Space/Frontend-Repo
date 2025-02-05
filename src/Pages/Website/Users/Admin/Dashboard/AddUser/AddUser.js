@@ -16,10 +16,12 @@ export default function AddUser() {
     setLoading(true);
     e.preventDefault();
     try {
-      const res = await Axios.post(`/users`, { // => Doesn't Work
+      const res = await Axios.post(`/users`, {
         name: name,
         email: email,
         password: password,
+        password_confirmation: password,
+        gender: "Male",
         role: role,
       });
       setLoading(false);
