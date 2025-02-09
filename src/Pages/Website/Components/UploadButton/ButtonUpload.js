@@ -1,19 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./uploadButton.module.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 export default function ButtonUpload() {
-  const displayFileName = () => {
-    const input = document.getElementById("myfile");
-    const fileNameDisplay = document.getElementById("file-name");
+  // const displayFileName = () => {
+  //   const input = document.getElementById("myfile");
+  //   const fileNameDisplay = document.getElementById("file-name");
 
-    // Display the name of the selected file
-    if (input.files.length > 0) {
-      fileNameDisplay.textContent = `Selected File: ${input.files[0].name}`;
-    } else {
-      fileNameDisplay.textContent = "No file selected";
-    }
-  };
+  //   // Display the name of the selected file
+  //   if (input.files.length > 0) {
+  //     fileNameDisplay.textContent = `Selected File: ${input.files[0].name}`;
+  //   } else {
+  //     fileNameDisplay.textContent = "No file selected";
+  //   }
+  // };
 
   return (
     <>
@@ -26,18 +27,10 @@ export default function ButtonUpload() {
           cursor: "pointer",
         }}>
         <div>
-          <input
-            type="file"
-            id="myfile"
-            name="myfile"
-            onChange={displayFileName}
-            className="d-none"
-          />
-
-          <label
-            htmlFor="myfile"
+          <Link
+            to="/profile/upload"
             className={`${styles["file-label"]}`}
-            style={{ cursor: "pointer" }}>
+            style={{ cursor: "pointer", textDecoration: "none" }}>
             <FontAwesomeIcon
               icon={faUpload}
               className={`${styles.icon}`}
@@ -47,8 +40,8 @@ export default function ButtonUpload() {
                 fontSize: "20px",
               }}
             />
-            <span>Upload Files</span>
-          </label>
+            <span style={{ color: "#A780F7" }}>Upload</span>
+          </Link>
 
           {/* <p  className={`${styles["file-name"]}`} id="file-name">
               No file selected

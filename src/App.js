@@ -21,6 +21,7 @@ import EditUser from "./Pages/Website/Users/Admin/Dashboard/EditUser/EditUser";
 import Users from "./Pages/Website/Users/Admin/Dashboard/Users/Users";
 import Dashboard from "./Pages/Website/Users/Admin/Dashboard/Dashboard";
 import MyProfile from "./Pages/Website/Users/Talent/TalentProfile/MyProfile";
+import UploadPage from "./Pages/Website/Components/UploadVideo/UploadPage";
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
               <Route path="my-profile" element={<MyProfile />} />
               <Route path="saved-videos" element={<SavedVideos />} />
               <Route path="edit-profile-talent" element={<EditProfile />} />
+              <Route path="upload" element={<UploadPage />} />
             </Route>
             <Route element={<RequireAuth allowedRole={["Mentor"]} />}>
               <Route path="mentor" element={<MentorProfile />} />
