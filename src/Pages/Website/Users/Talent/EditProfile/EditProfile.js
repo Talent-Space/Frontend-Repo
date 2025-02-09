@@ -2,16 +2,20 @@ import styles from "./editProfile.module.css";
 import { useState } from "react";
 import { Container, ListGroup, ListGroupItem } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faChevronRight, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark,
+  faChevronRight,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import ButtonUpload from "../../../Components/UploadButton/ButtonUpload";
-import WebsiteNavbar from "../../../Components/WebsiteNavbar/WebsiteNavbar";
-import SideBar from "../../../Components/SideBar/SideBar";
 import UserInfo from "../../../Components/UserInfo/UserInfo";
+import EditProfileModal from "../../../Components/EditProfileModal/EditProfileModal";
 
 export default function EditProfile() {
   const [showSidebar, setShowSidebar] = useState(false);
-  let screen = true;
-  let user = "user";
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSetting, setSelectedSetting] = useState(null);
+  
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
@@ -39,38 +43,60 @@ export default function EditProfile() {
     "Gender",
   ];
 
+  const handleSettingClick = (setting) => {
+    setSelectedSetting(setting);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedSetting(null);
+  };
+
+  const handleSaveChanges = (formData) => {
+    // Handle saving the form data
+    console.log("Saving changes:", formData);
+  };
+
   return (
     <>
-        <div
-          className={`${styles.rightSide}`}
-          style={{ backgroundColor: "#FFF" }}
-        >
-          <UserInfo />
-          {/* Second section  */}
-          <Container className="mt-4">
-            <ListGroup variant="flush">
-              {settings.map((setting, index) => (
-                <ListGroupItem
-                  key={index}
-                  className={`${styles.item} d-flex justify-content-between align-items-center py-3 border-bottom`}
+      <div
+        className={`${styles.rightSide}`}
+        style={{ backgroundColor: "#FFF" }}
+      >
+        <UserInfo />
+        {/* Second section  */}
+        <Container>
+          <ListGroup variant="flush">
+            {settings.map((setting, index) => (
+              <ListGroupItem
+                key={index}
+                className={`${styles.item} d-flex justify-content-between align-items-center py-3 border-bottom`}
+                onClick={() => handleSettingClick(setting)}
+                style={{ cursor: "pointer" }}
+              >
+                <span
+                  className={`${styles.setting}`}
+                  style={{ fontSize: "22.21px", color: "#212121" }}
                 >
-                  <span
-                    className={`${styles.setting}`}
-                    style={{ fontSize: "22.21px", color: "#212121" }}
-                  >
-                    {setting}
-                  </span>
-                  <FontAwesomeIcon
-                    icon={faChevronRight}
-                    size="1x"
-                    color="#939196"
-                  />
-                </ListGroupItem>
-              ))}
-            </ListGroup>
-          </Container>
-        </div>
-        <ButtonUpload />
+                  {setting}
+                </span>
+                <FontAwesomeIcon
+                  icon={faChevronRight}
+                  size="1x"
+                  color="#939196"
+                />
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </Container>
+      </div>
+      <ButtonUpload />
+      <EditProfileModal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        onSave={handleSaveChanges}
+      />
     </>
   );
 }
