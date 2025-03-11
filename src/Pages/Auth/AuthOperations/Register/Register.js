@@ -21,12 +21,12 @@ export default function Register() {
   const cookie = Cookie();
 
   // console.log(form);
-  
+
   const registerSchema = Yup.object().shape({
     name: Yup.string()
-    .min(3, "Too Short!")
-    .max(40, "Too Long!")
-    .required("Name is Required"),
+      .min(3, "Too Short!")
+      .max(40, "Too Long!")
+      .required("Name is Required"),
     email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string()
       .matches(
@@ -36,13 +36,13 @@ export default function Register() {
       .min(2, "Too Short!")
       .max(50, "Too Long!")
       .required("Password is Required"),
-      confirmPassword: Yup.string()
+    confirmPassword: Yup.string()
       .required("Please Retype Password")
       .oneOf([Yup.ref("password")], "Password doesn't match"),
-    });
+  });
 
-    const formik = useFormik({
-      initialValues: {
+  const formik = useFormik({
+    initialValues: {
       name: "",
       email: "",
       password: "",
@@ -53,7 +53,7 @@ export default function Register() {
     validationSchema: registerSchema,
     validateOnChange: true,
     validateOnBlur: true,
-    
+
     onSubmit: (values) => {},
   });
   // console.log(formik.values);
@@ -74,7 +74,7 @@ export default function Register() {
       const token = res.data.Token;
       // console.log(token);
       cookie.set("talent-space", token);
-      window.location.pathname = "/";
+      window.location.pathname = "/login";
       // console.log("Success");
     } catch (err) {
       console.log(err.response);
@@ -262,7 +262,7 @@ export default function Register() {
                       as="button"
                       type="button"
                       className={styles.dropdownItem}
-                      onClick={() => formik.setFieldValue('role', 'Talent')}
+                      onClick={() => formik.setFieldValue("role", "Talent")}
                     >
                       Talent
                     </Dropdown.Item>
@@ -270,7 +270,7 @@ export default function Register() {
                       as="button"
                       type="button"
                       className={styles.dropdownItem}
-                      onClick={() => formik.setFieldValue('role', 'Mentor')}
+                      onClick={() => formik.setFieldValue("role", "Mentor")}
                     >
                       Mentor
                     </Dropdown.Item>
@@ -278,7 +278,7 @@ export default function Register() {
                       as="button"
                       type="button"
                       className={styles.dropdownItem}
-                      onClick={() => formik.setFieldValue('role', 'Investor')}
+                      onClick={() => formik.setFieldValue("role", "Investor")}
                     >
                       Investor
                     </Dropdown.Item>
@@ -296,9 +296,11 @@ export default function Register() {
                         onChange={() => formik.setFieldValue("gender", "Male")}
                         className={styles.hidden}
                       />
-                      <label 
-                        htmlFor="male" 
-                        className={`${styles.buttonLabel} ${formik.values.gender === "male" ? styles.selected : ""}`}
+                      <label
+                        htmlFor="male"
+                        className={`${styles.buttonLabel} ${
+                          formik.values.gender === "male" ? styles.selected : ""
+                        }`}
                       >
                         <h1>Male</h1>
                       </label>
@@ -309,12 +311,18 @@ export default function Register() {
                         id="female"
                         value="female"
                         checked={formik.values.gender === "female"}
-                        onChange={() => formik.setFieldValue("gender", "Female")}
+                        onChange={() =>
+                          formik.setFieldValue("gender", "Female")
+                        }
                         className={styles.hidden}
                       />
-                      <label 
-                        htmlFor="female" 
-                        className={`${styles.buttonLabel} ${formik.values.gender === "female" ? styles.selected : ""}`}
+                      <label
+                        htmlFor="female"
+                        className={`${styles.buttonLabel} ${
+                          formik.values.gender === "female"
+                            ? styles.selected
+                            : ""
+                        }`}
                       >
                         <h1>Female</h1>
                       </label>
@@ -340,6 +348,9 @@ export default function Register() {
                     </span>
                     <div className="d-flex align-items-center justify-content-center gap-5">
                       <Link
+                        to={
+                          "https://promotiontalents-cegag6hybkexbgds.uaenorth-01.azurewebsites.net/api/auth/facebook"
+                        }
                         className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
                       >
                         <img
@@ -349,6 +360,9 @@ export default function Register() {
                         />
                       </Link>
                       <Link
+                        to={
+                          "https://promotiontalents-cegag6hybkexbgds.uaenorth-01.azurewebsites.net/api/auth/google"
+                        }
                         className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
                       >
                         <img

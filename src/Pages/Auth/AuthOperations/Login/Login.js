@@ -231,19 +231,19 @@ export default function Login() {
                     <span className={styles["social-info"]}>Or Login With</span>
                     <div className="d-flex align-items-center justify-content-center gap-5">
                       <Link
+                        to="https://promotiontalents-cegag6hybkexbgds.uaenorth-01.azurewebsites.net/api/auth/facebook"
                         className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
                       >
                         <img
-                          // width={"50px"}
                           src={require("../../../../Assets/Images/facebook.png")}
                           alt="facebook"
                         />
                       </Link>
                       <Link
+                        to="https://promotiontalents-cegag6hybkexbgds.uaenorth-01.azurewebsites.net/api/auth/google"
                         className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
                       >
                         <img
-                          // width={"50px"}
                           src={require("../../../../Assets/Images/google.png")}
                           alt="google"
                         />

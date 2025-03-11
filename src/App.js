@@ -22,10 +22,9 @@ import Users from "./Pages/Website/Users/Admin/Dashboard/Users/Users";
 import Dashboard from "./Pages/Website/Users/Admin/Dashboard/Dashboard";
 import MyProfile from "./Pages/Website/Users/Talent/TalentProfile/MyProfile";
 import UploadPage from "./Pages/Website/Components/UploadVideo/UploadPage";
+import GoogleAuthCallback from "./Pages/Auth/AuthOperations/GoogleAuthCallback/GoogleAuthCallback";
 
 function App() {
-
-  
   return (
     <div className="App">
       <Routes>
@@ -33,6 +32,7 @@ function App() {
         <Route element={<RequireBack />}>
           <Route index path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="/callback" element={<GoogleAuthCallback />} />
           <Route path="resetPassword" element={<ResetPassword />} />
           <Route path="newPassword" element={<NewPassword />} />
           <Route path="checkEmail" element={<CheckEmail />} />
