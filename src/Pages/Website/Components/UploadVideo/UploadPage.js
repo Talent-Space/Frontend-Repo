@@ -108,8 +108,10 @@ const UploadPage = () => {
         return;
       }
       // Validate file size (e.g., max 10MB for Base64 - smaller due to encoding overhead)
-      if (file.size > 10 * 1024 * 1024) {
-        setStatusMessage('File size exceeds 10MB limit (Base64 encoding limitation)');
+      const MAX_FILE_SIZE = 100 * 1024 * 1024; // Changed to 50MB as an example
+      
+      if (file.size > MAX_FILE_SIZE) {
+        setStatusMessage(`File size exceeds ${MAX_FILE_SIZE / (1024 * 1024)}MB limit (Base64 encoding limitation)`);
         setError(true);
         return;
       }
@@ -363,33 +365,74 @@ const UploadPage = () => {
                     style={{ paddingLeft: "2.5rem" }}
                     value={formValues.city}
                     onChange={(e) => {
-                      setFormValues((prev) => ({
+                        setFormValues((prev) => ({
                         ...prev,
                         city: e.target.value,
-                      }));
-                    }}
-                  >
-                    <option value=""> City </option>
-                    <option value="cairo"> Cairo </option>
-                    <option value="alexandria"> Alexandria </option>
-                  </select>
-                </div>
-                <div style={{ position: "relative" }}>
-                  <FontAwesomeIcon
-                    icon={faSmile}
-                    style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "#666",
-                    }}
-                  />
-                  <select
-                    className={styles.select}
-                    style={{ paddingLeft: "2.5rem" }}
-                    value={formValues.feeling}
-                    onChange={(e) => {
+                        }));
+                      }}
+                      >
+                      <option value=""> City </option>
+                      <option value="Cairo"> Cairo </option>
+                      <option value="Alexandria"> Alexandria </option>
+                      <option value="Giza"> Giza </option>
+                      <option value="Shubra El Kheima"> Shubra El Kheima </option>
+                      <option value="Port Said"> Port Said </option>
+                      <option value="Suez"> Suez </option>
+                      <option value="Mansoura"> Mansoura </option>
+                      <option value="Mahalla"> Mahalla </option>
+                      <option value="Tanta"> Tanta </option>
+                      <option value="Asyut"> Asyut </option>
+                      <option value="Ismailia"> Ismailia </option>
+                      <option value="Faiyum"> Faiyum </option>
+                      <option value="Zagazig"> Zagazig </option>
+                      <option value="Damietta"> Damietta </option>
+                      <option value="Aswan"> Aswan </option>
+                      <option value="Minya"> Minya </option>
+                      <option value="Damanhur"> Damanhur </option>
+                      <option value="Beni Suef"> Beni Suef </option>
+                      <option value="Qena"> Qena </option>
+                      <option value="Sohag"> Sohag </option>
+                      <option value="Hurghada"> Hurghada </option>
+                      <option value="6th of October City"> 6th of October City </option>
+                      <option value="Shibin El Kom"> Shibin El Kom </option>
+                      <option value="Banha"> Banha </option>
+                      <option value="Kafr El Sheikh"> Kafr El Sheikh </option>
+                      <option value="Arish"> Arish </option>
+                      <option value="Mallawi"> Mallawi </option>
+                      <option value="10th of Ramadan City"> 10th of Ramadan City </option>
+                      <option value="Bilbais"> Bilbais </option>
+                      <option value="Marsa Matruh"> Marsa Matruh </option>
+                      <option value="Idfu"> Idfu </option>
+                      <option value="Mit Ghamr"> Mit Ghamr </option>
+                      <option value="Al-Hamidiyya"> Al-Hamidiyya </option>
+                      <option value="Desouk"> Desouk </option>
+                      <option value="Qalyub"> Qalyub </option>
+                      <option value="Abu Kabir"> Abu Kabir </option>
+                      <option value="Kafr el-Dawwar"> Kafr el-Dawwar </option>
+                      <option value="Girga"> Girga </option>
+                      <option value="Akhmim"> Akhmim </option>
+                      <option value="Matareya"> Matareya </option>
+                      <option value="Manfalut"> Manfalut </option>
+                      <option value="Qaha"> Qaha </option>
+                      <option value="New Cairo"> New Cairo </option>
+                      </select>
+                    </div>
+                    <div style={{ position: "relative" }}>
+                      <FontAwesomeIcon
+                      icon={faSmile}
+                      style={{
+                        position: "absolute",
+                        left: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "#666",
+                      }}
+                      />
+                      <select
+                      className={styles.select}
+                      style={{ paddingLeft: "2.5rem" }}
+                      value={formValues.feeling}
+                      onChange={(e) => {
                       setFormValues((prev) => ({
                         ...prev,
                         feelings: e.target.value,
