@@ -15,7 +15,6 @@ import { baseURL, USER } from "../../../../Api/Api";
 import { Axios } from "../../../../Api/Axios";
 import styled from 'styled-components';
 
-
 const ProgressBar = styled.div`
   width: 100%;
   height: 8px;
@@ -45,15 +44,11 @@ const UploadPage = () => {
     city: "",
     date: "",
     tags: "",
-    image: null,
+    thumbnail: null,
+    thumbnailBase64: null, // Added to store Base64 encoded thumbnail
     video: null,
   });
-  const [userID, setUserID] = useState("")
-  // const [file, setFile] = useState(null);
-  // const [uploadedFileUrl, setUploadedFileUrl] = useState("");
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [uploadStatus, setUploadStatus] = useState(null);
-
+  const [userID, setUserID] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState('');
@@ -62,14 +57,8 @@ const UploadPage = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      // setIsLoading(true);
-      // setError(null);
-      // setProfileImage(defaultProfileImage)
-
       try {
-        // Fetch basic user info
         const userResponse = await Axios.get(`/${USER}`);
-        console.log(userResponse.data)
         const userData = userResponse.data;
         setUserID({
           id: userData.id || "",
@@ -78,7 +67,6 @@ const UploadPage = () => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -87,12 +75,35 @@ const UploadPage = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(',')[1]); // Remove data URI prefix
+      reader.onload = () => resolve(reader.result.split(',')[1]);
       reader.onerror = (error) => reject(error);
     });
   };
 
-  // Handle file selection
+  // Handle thumbnail selection
+  const handleThumbnailChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const base64Thumbnail = await fileToBase64(file);
+        const imageUrl = URL.createObjectURL(file);
+        setFormValues((prev) => ({
+          ...prev,
+          thumbnail: file,
+          thumbnailBase64: base64Thumbnail,
+          imagePreview: imageUrl,
+        }));
+        setStatusMessage(`Selected thumbnail: ${file.name}`);
+        setError(false);
+      } catch (err) {
+        setStatusMessage('Failed to encode thumbnail');
+        setError(true);
+        console.error('Thumbnail encoding error:', err);
+      }
+    }
+  };
+
+  // Handle video selection
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -101,17 +112,14 @@ const UploadPage = () => {
         ...prev,
         videoPreview: videoUrl,
       }));
-      // Validate file type
       if (!file.type.startsWith('video/')) {
         setStatusMessage('Please select a valid video file');
         setError(true);
         return;
       }
-      // Validate file size (e.g., max 10MB for Base64 - smaller due to encoding overhead)
-      const MAX_FILE_SIZE = 100 * 1024 * 1024; // Changed to 50MB as an example
-      
+      const MAX_FILE_SIZE = 100 * 1024 * 1024;
       if (file.size > MAX_FILE_SIZE) {
-        setStatusMessage(`File size exceeds ${MAX_FILE_SIZE / (1024 * 1024)}MB limit (Base64 encoding limitation)`);
+        setStatusMessage(`File size exceeds ${MAX_FILE_SIZE / (1024 * 1024)}MB limit`);
         setError(true);
         return;
       }
@@ -120,7 +128,6 @@ const UploadPage = () => {
       setError(false);
     }
   };
-  console.log(formValues)
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -140,17 +147,15 @@ const UploadPage = () => {
 
     setIsProcessing(true);
     setError(false);
-    setStatusMessage('Encoding video to Base64...');
+    setStatusMessage('Encoding files to Base64...');
 
     try {
-      // Convert video to Base64
       const base64Video = await fileToBase64(selectedFile);
-      setStatusMessage('Uploading encoded video...');
+      setStatusMessage('Uploading encoded files...');
 
       const formattedDate = formatDate(formValues.date);
 
-      // Send Base64 string to backend
-      const response = await axios.post(`${baseURL}/video/upload`, {
+      const payload = {
         video: base64Video,
         filename: selectedFile.name,
         mimeType: selectedFile.type,
@@ -160,8 +165,11 @@ const UploadPage = () => {
         tags: formValues.tags,
         city: formValues.city,
         date: formattedDate,
-        Status: "pending"
-      }, {
+        thumbnail: formValues.thumbnailBase64, // Send Base64 encoded thumbnail
+        thumbnail_mimeType: formValues.thumbnail?.type // Include thumbnail MIME type
+      };
+
+      const response = await axios.post(`${baseURL}/video/upload`, payload, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -173,6 +181,17 @@ const UploadPage = () => {
 
       setStatusMessage('Video uploaded successfully!');
       setSelectedFile(null);
+      setFormValues({
+        title: "",
+        feelings: "",
+        notes: "",
+        city: "",
+        date: "",
+        tags: "",
+        thumbnail: null,
+        thumbnailBase64: null,
+        video: null,
+      });
       setUploadProgress(0);
     } catch (error) {
       console.error('Upload error:', error);
@@ -203,21 +222,8 @@ const UploadPage = () => {
                   accept="image/*"
                   id="imageUpload"
                   style={{ display: "none" }}
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (e) => {
-                        const imageUrl = e.target.result;
-                        setFormValues((prev) => ({
-                          ...prev,
-                          image: file,
-                          imagePreview: imageUrl,
-                        }));
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
+                  onChange={handleThumbnailChange} // Updated handler
+                  disabled={isProcessing}
                 />
                 <label
                   htmlFor="imageUpload"
@@ -297,6 +303,7 @@ const UploadPage = () => {
                 <ProgressFill progress={uploadProgress} />
               </ProgressBar>
             )}
+            {/* ... (form remains the same) */}
             <form className={styles.form}>
               <div style={{ position: "relative" }}>
                 <FontAwesomeIcon
@@ -365,74 +372,75 @@ const UploadPage = () => {
                     style={{ paddingLeft: "2.5rem" }}
                     value={formValues.city}
                     onChange={(e) => {
-                        setFormValues((prev) => ({
+                      setFormValues((prev) => ({
                         ...prev,
                         city: e.target.value,
-                        }));
-                      }}
-                      >
-                      <option value=""> City </option>
-                      <option value="Cairo"> Cairo </option>
-                      <option value="Alexandria"> Alexandria </option>
-                      <option value="Giza"> Giza </option>
-                      <option value="Shubra El Kheima"> Shubra El Kheima </option>
-                      <option value="Port Said"> Port Said </option>
-                      <option value="Suez"> Suez </option>
-                      <option value="Mansoura"> Mansoura </option>
-                      <option value="Mahalla"> Mahalla </option>
-                      <option value="Tanta"> Tanta </option>
-                      <option value="Asyut"> Asyut </option>
-                      <option value="Ismailia"> Ismailia </option>
-                      <option value="Faiyum"> Faiyum </option>
-                      <option value="Zagazig"> Zagazig </option>
-                      <option value="Damietta"> Damietta </option>
-                      <option value="Aswan"> Aswan </option>
-                      <option value="Minya"> Minya </option>
-                      <option value="Damanhur"> Damanhur </option>
-                      <option value="Beni Suef"> Beni Suef </option>
-                      <option value="Qena"> Qena </option>
-                      <option value="Sohag"> Sohag </option>
-                      <option value="Hurghada"> Hurghada </option>
-                      <option value="6th of October City"> 6th of October City </option>
-                      <option value="Shibin El Kom"> Shibin El Kom </option>
-                      <option value="Banha"> Banha </option>
-                      <option value="Kafr El Sheikh"> Kafr El Sheikh </option>
-                      <option value="Arish"> Arish </option>
-                      <option value="Mallawi"> Mallawi </option>
-                      <option value="10th of Ramadan City"> 10th of Ramadan City </option>
-                      <option value="Bilbais"> Bilbais </option>
-                      <option value="Marsa Matruh"> Marsa Matruh </option>
-                      <option value="Idfu"> Idfu </option>
-                      <option value="Mit Ghamr"> Mit Ghamr </option>
-                      <option value="Al-Hamidiyya"> Al-Hamidiyya </option>
-                      <option value="Desouk"> Desouk </option>
-                      <option value="Qalyub"> Qalyub </option>
-                      <option value="Abu Kabir"> Abu Kabir </option>
-                      <option value="Kafr el-Dawwar"> Kafr el-Dawwar </option>
-                      <option value="Girga"> Girga </option>
-                      <option value="Akhmim"> Akhmim </option>
-                      <option value="Matareya"> Matareya </option>
-                      <option value="Manfalut"> Manfalut </option>
-                      <option value="Qaha"> Qaha </option>
-                      <option value="New Cairo"> New Cairo </option>
-                      </select>
-                    </div>
-                    <div style={{ position: "relative" }}>
-                      <FontAwesomeIcon
-                      icon={faSmile}
-                      style={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        color: "#666",
-                      }}
-                      />
-                      <select
-                      className={styles.select}
-                      style={{ paddingLeft: "2.5rem" }}
-                      value={formValues.feeling}
-                      onChange={(e) => {
+                      }));
+                    }}
+                  >
+                    {/* ... (city options remain the same) */}
+                    <option value=""> City </option>
+                    <option value="Cairo"> Cairo </option>
+                    <option value="Alexandria"> Alexandria </option>
+                    <option value="Giza"> Giza </option>
+                    <option value="Shubra El Kheima"> Shubra El Kheima </option>
+                    <option value="Port Said"> Port Said </option>
+                    <option value="Suez"> Suez </option>
+                    <option value="Mansoura"> Mansoura </option>
+                    <option value="Mahalla"> Mahalla </option>
+                    <option value="Tanta"> Tanta </option>
+                    <option value="Asyut"> Asyut </option>
+                    <option value="Ismailia"> Ismailia </option>
+                    <option value="Faiyum"> Faiyum </option>
+                    <option value="Zagazig"> Zagazig </option>
+                    <option value="Damietta"> Damietta </option>
+                    <option value="Aswan"> Aswan </option>
+                    <option value="Minya"> Minya </option>
+                    <option value="Damanhur"> Damanhur </option>
+                    <option value="Beni Suef"> Beni Suef </option>
+                    <option value="Qena"> Qena </option>
+                    <option value="Sohag"> Sohag </option>
+                    <option value="Hurghada"> Hurghada </option>
+                    <option value="6th of October City"> 6th of October City </option>
+                    <option value="Shibin El Kom"> Shibin El Kom </option>
+                    <option value="Banha"> Banha </option>
+                    <option value="Kafr El Sheikh"> Kafr El Sheikh </option>
+                    <option value="Arish"> Arish </option>
+                    <option value="Mallawi"> Mallawi </option>
+                    <option value="10th of Ramadan City"> 10th of Ramadan City </option>
+                    <option value="Bilbais"> Bilbais </option>
+                    <option value="Marsa Matruh"> Marsa Matruh </option>
+                    <option value="Idfu"> Idfu </option>
+                    <option value="Mit Ghamr"> Mit Ghamr </option>
+                    <option value="Al-Hamidiyya"> Al-Hamidiyya </option>
+                    <option value="Desouk"> Desouk </option>
+                    <option value="Qalyub"> Qalyub </option>
+                    <option value="Abu Kabir"> Abu Kabir </option>
+                    <option value="Kafr el-Dawwar"> Kafr el-Dawwar </option>
+                    <option value="Girga"> Girga </option>
+                    <option value="Akhmim"> Akhmim </option>
+                    <option value="Matareya"> Matareya </option>
+                    <option value="Manfalut"> Manfalut </option>
+                    <option value="Qaha"> Qaha </option>
+                    <option value="New Cairo"> New Cairo </option>
+                  </select>
+                </div>
+                <div style={{ position: "relative" }}>
+                  <FontAwesomeIcon
+                    icon={faSmile}
+                    style={{
+                      position: "absolute",
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "#666",
+                    }}
+                  />
+                  <select
+                    className={styles.select}
+                    style={{ paddingLeft: "2.5rem" }}
+                    value={formValues.feelings}
+                    onChange={(e) => {
                       setFormValues((prev) => ({
                         ...prev,
                         feelings: e.target.value,
@@ -474,7 +482,6 @@ const UploadPage = () => {
                 type="submit"
                 className={styles.button}
                 style={{
-                  // marginLeft: '10px',
                   opacity: (!selectedFile || isProcessing) ? 0.6 : 1,
                 }}
               >
