@@ -14,11 +14,17 @@ import { Axios } from "../../../../Api/Axios";
 export default function WebsiteNavbar(props) {
 
   const [currentUser, setCurrentUser] = useState();
+  const [profileImage, setProfileImage] = useState(require("../../../../Assets/Images/profile.jpg"));
 
-  {/* Get current user data */}
+
+  {/* Get current user data */ }
   useEffect(() => {
     Axios.get(`/${USER}`)
-      .then((res) => {
+      .then(async (res) => {
+        const base64Response = await fetch(`data:image/jpeg;base64,${res.data.profilePicture}`);
+        const blob = await base64Response.blob();
+        const url = URL.createObjectURL(blob);
+        setProfileImage(url);
         setCurrentUser(res.data);
       })
       .catch((err) => {
@@ -28,7 +34,7 @@ export default function WebsiteNavbar(props) {
 
   return (
     <>
-    {/* <span>Test</span> */}
+      {/* <span>Test</span> */}
       <nav className={`${styles["web-nav"]}`}>
         <div className={`${styles["nav-container"]}`}>
           <div
@@ -85,9 +91,16 @@ export default function WebsiteNavbar(props) {
                   <Link>
                     <FontAwesomeIcon icon={faBell} />
                   </Link>
-                  
+
                   <Link to={currentUser?.role === "Admin" ? "/dashboard/my-profile" : "/profile/my-profile"}>
-                    <FontAwesomeIcon icon={faCircleUser} />
+                    <div>
+                      <img
+                        src={profileImage}
+                        alt="profilePicture"
+                        width="24"
+                        style={{ borderRadius: "50%", objectFit: "contain" }}
+                      />
+                    </div>
                   </Link>
                 </div>
               </div>

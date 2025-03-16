@@ -14,7 +14,7 @@ export default function Gallery() {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(`${baseURL}/videos`);
-        console.log(response.data)
+        // console.log(response.data)
         setVideos(response.data);
         setLoading(false);
       } catch (err) {

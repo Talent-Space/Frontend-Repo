@@ -33,6 +33,7 @@ export default function UserInfo() {
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // Get User Data
   useEffect(() => {
     const fetchUserData = async () => {
       setIsLoading(true);
@@ -42,7 +43,7 @@ export default function UserInfo() {
       try {
         // Fetch basic user info
         const userResponse = await Axios.get(`/${USER}`);
-        console.log(userResponse.data)
+        // console.log(userResponse.data)
         const userData = userResponse.data;
         setUserInfo({
           name: userData.name || "",
