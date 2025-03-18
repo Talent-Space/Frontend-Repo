@@ -41,6 +41,8 @@ export default function EditProfile() {
     "Change Password",
     "Phone Number",
     "Gender",
+    "Bio",
+    "Birthday",
   ];
 
   const handleSettingClick = (setting) => {

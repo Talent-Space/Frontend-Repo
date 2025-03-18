@@ -54,21 +54,22 @@ export default function UserInfo() {
           photo: userData.photo || "",
           role: userData.role || "",
           id: userData.id || "",
+          bio: userData.bio || "",
         });
-          setProfileInfo({
-            address: userData.address || "",
-            bio: userData.bio || "",
-            profilePicture: userData.profilePicture || defaultProfileImage,
-          });
+        setProfileInfo({
+          address: userData.address || "",
+          bio: userData.bio || "",
+          profilePicture: userData.profilePicture || defaultProfileImage,
+        });
 
-          // Update profile image only if profilePicture exists and is non-empty
-          if (userData.profilePicture && userData.profilePicture.trim() !== "") {
-            const decodedImage = `data:image/jpeg;base64,${userData.profilePicture}`;
-            setProfileImage(decodedImage);
-          } else {
-            // Keep the default image if no profilePicture is available
-            setProfileImage(defaultProfileImage);
-          
+        // Update profile image only if profilePicture exists and is non-empty
+        if (userData.profilePicture && userData.profilePicture.trim() !== "") {
+          const decodedImage = `data:image/jpeg;base64,${userData.profilePicture}`;
+          setProfileImage(decodedImage);
+        } else {
+          // Keep the default image if no profilePicture is available
+          setProfileImage(defaultProfileImage);
+
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -164,10 +165,13 @@ export default function UserInfo() {
             <h2>
               {userInfo.name.charAt(0).toUpperCase() + userInfo.name.slice(1) || "No Name"}
             </h2>
-            <p style={{ color: "#969696", fontSize: "20px" }}>
-              {userInfo.role || "No Role"}
+            <p style={{ color: "#969696", fontSize: "18px" }}>
+              Role: {userInfo.role || "No Role"}
             </p>
-            <button
+            <p style={{ color: "#969696", fontSize: "14px" }}>
+              Bio: {userInfo.bio || "No Bio"}
+            </p>
+            {userInfo.role === "Investor" || userInfo.role === "Mentor" ? <button
               className="btn mb-3"
               disabled={userInfo.role === "Admin"}
               style={{
@@ -179,7 +183,7 @@ export default function UserInfo() {
               }}
             >
               Follow
-            </button>
+            </button> : ""}
           </div>
           <div className={`${styles.details} d-flex col-md-3 text-center mx-4`}>
             <div className="me-3">
@@ -190,12 +194,12 @@ export default function UserInfo() {
             </div>
             <div className="">
               <strong style={{ display: "block" }}>3.5</strong>
-              <div className="d-flex align-items-center">
+              <div>
                 <span style={{ display: "inline" }}>Rate</span>
-                <FontAwesomeIcon
+                {/* <FontAwesomeIcon
                   icon={faStar}
                   style={{ color: "gold", marginLeft: "4px" }}
-                />
+                /> */}
               </div>
             </div>
           </div>

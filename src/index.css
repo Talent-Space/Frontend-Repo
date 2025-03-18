@@ -29,3 +29,7 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #5a27c9;
 }
+
+html {
+  scroll-behavior: smooth;
+}
