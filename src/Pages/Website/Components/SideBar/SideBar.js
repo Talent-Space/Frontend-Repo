@@ -1,26 +1,84 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./sidebar.module.css";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { faChalkboardUser, faComments, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { LOGOUT, USER, baseURL } from "../../../../Api/Api";
+import { LOGOUT, USER } from "../../../../Api/Api";
 import Cookie from "cookie-universal";
 import { Axios } from "../../../../Api/Axios";
+import {
+  faBookmark,
+  faPenToSquare,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+
+const itemsSidebar = {
+  Talent: {
+    myProfile: {
+      text: "My Profile",
+      path: "my-profile",
+      icon: <FontAwesomeIcon icon={faUser} />,
+    },
+    savedVideos: {
+      text: "Saved Videos",
+      path: "saved-videos",
+      icon: <FontAwesomeIcon icon={faBookmark} />,
+    },
+    editProfile: {
+      text: "Edit Profile",
+      path: "edit-profile-talent",
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
+    },
+  },
+  Mentor: {
+    feedbacks: {
+      text: "Feedbacks",
+      path: "feedbacks",
+      icon: <FontAwesomeIcon icon={faComments} />,
+    },
+    peopleTrains: {
+      text: "People Trains",
+      path: "people-trains",
+      icon: <FontAwesomeIcon icon={faChalkboardUser} />,
+    },
+    editProfile: {
+      text: "Edit Profile",
+      path: "edit-profile-mentor",
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
+    },
+  },
+  Investor: {
+    myProfile: {
+      text: "My Profile",
+      path: "my-profile",
+      icon: <FontAwesomeIcon icon={faUser} />,
+    },
+    investments: {
+      text: "My Investments",
+      path: "my-investments",
+      icon: <FontAwesomeIcon icon={faBookmark} />,
+    },
+    editProfile: {
+      text: "Edit Profile",
+      path: "edit-profile",
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
+    },
+  },
+};
 
 export default function SideBar(props) {
   const cookie = Cookie();
+  const userItems = itemsSidebar[props.type] || {};
 
   const [activeKey, setActiveKey] = useState(null);
   const [user, setUser] = useState("");
   const navigate = useNavigate();
 
-  //Get User
+  // Get User
   useEffect(() => {
     Axios.get(`/${USER}`)
       .then((res) => {
         setUser(res.data);
-        // console.log(res.data.role);
       })
       .catch(() => navigate("/login", { replace: true }));
   }, []);
@@ -29,22 +87,36 @@ export default function SideBar(props) {
     setActiveKey(key);
   };
 
-  const mapItems = Object.keys(props.items).map((key) => (
-    <NavLink to={props.items[key].path} key={key}>
+  // const mapItems = Object.keys(props.items).map((key) => (
+  //   <NavLink to={props.items[key].path} key={key}>
+  //     <li
+  //       key={key}
+  //       onClick={() => liColor(key)}
+  //       className={`d-flex align-items-center ${activeKey === key ? styles.activeLi : ""
+  //         }`}
+  //       style={{ color: activeKey === key ? "#7939FF" : "" }}
+  //     >
+  //       {props.items[key].icon ? (
+  //         <span className="me-2">{props.items[key].icon}</span>
+  //       ) : (
+  //         ""
+  //       )}
+  //       {props.items[key].text || props.items[key]}
+  //     </li>
+  //   </NavLink>
+  // ));
+  const mapItems = Object.keys(userItems).map((key) => (
+    <NavLink to={userItems[key].path} key={key}>
       <li
-        key={key}
         onClick={() => liColor(key)}
-        className={`d-flex align-items-center ${
-          activeKey === key ? styles.activeLi : ""
-        }`}
+        className={`d-flex align-items-center ${activeKey === key ? styles.activeLi : ""
+          }`}
         style={{ color: activeKey === key ? "#7939FF" : "" }}
       >
-        {props.items[key].icon && props.type.includes(user.role) ? (
-          <span className="me-2">{props.items[key].icon}</span>
-        ) : (
-          ""
+        {userItems[key].icon && (
+          <span className="me-2">{userItems[key].icon}</span>
         )}
-        {props.items[key].text || props.items[key]}
+        <span>{userItems[key].text}</span>
       </li>
     </NavLink>
   ));
@@ -58,14 +130,11 @@ export default function SideBar(props) {
       }
       const res = await Axios.post(`/${LOGOUT}`);
       cookie.remove("talent-space");
-      // console.log(res);
       window.location.pathname = "/login";
     } catch (err) {
       console.error("Error during logout:", err);
     }
   };
-
-  // console.log(mapItems);
 
   return (
     <>
@@ -78,7 +147,7 @@ export default function SideBar(props) {
         </div>
         <ul className={`${styles.talents}`}>
           {mapItems}
-          {props.type === "Admin" || "Talent" ? (
+          {props.type === "Admin" || "Talent" || "Mentor" || "Investor" ? (
             <>
               {props.logout === true ? (
                 <button

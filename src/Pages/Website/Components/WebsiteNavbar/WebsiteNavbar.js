@@ -17,20 +17,25 @@ export default function WebsiteNavbar(props) {
   const [profileImage, setProfileImage] = useState(require("../../../../Assets/Images/profile.jpg"));
 
 
-  {/* Get current user data */ }
+  // Get current user data
   useEffect(() => {
     Axios.get(`/${USER}`)
       .then(async (res) => {
-        const base64Response = await fetch(`data:image/jpeg;base64,${res.data.profilePicture}`);
-        const blob = await base64Response.blob();
-        const url = URL.createObjectURL(blob);
-        setProfileImage(url);
+        // console.log(res);
+        if (res.data.profilePicture) {
+          const base64Response = await fetch(`data:image/jpeg;base64,${res.data.profilePicture}`);
+          const blob = await base64Response.blob();
+          const url = URL.createObjectURL(blob);
+          setProfileImage(url);
+        } else {
+          setProfileImage(require("../../../../Assets/Images/profile.jpg"));
+        }
         setCurrentUser(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [])
+  }, []);
 
   return (
     <>
@@ -77,7 +82,7 @@ export default function WebsiteNavbar(props) {
                 <ul
                   className={`d-flex align-items-center justify-content-between gap-4`}>
                   <li>
-                    <Link to={"/"}>Home</Link>
+                    <Link to={currentUser?.role === "Investor" ? "/homeInvestor" : "/"}>Home</Link>
                   </li>
                   <li>
                     <Link to={"/categories"}>Categories</Link>
@@ -92,7 +97,7 @@ export default function WebsiteNavbar(props) {
                     <FontAwesomeIcon icon={faBell} />
                   </Link>
 
-                  <Link to={currentUser?.role === "Admin" ? "/dashboard/my-profile" : "/profile/my-profile"}>
+                  <Link to={currentUser?.role === "Admin" ? "/dashboard/my-profile" : currentUser?.role === "Talent" ? "/profile/talent-profile" : currentUser?.role === "Mentor" ? "/profile/mentor-profile" : "/profile"}>
                     <div>
                       <img
                         src={profileImage}

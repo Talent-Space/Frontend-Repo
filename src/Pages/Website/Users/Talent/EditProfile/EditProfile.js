@@ -21,19 +21,6 @@ export default function EditProfile() {
     setShowSidebar(!showSidebar);
   };
 
-  const itemsSidebar = {
-    savedVideos: {
-      text: "Saved Videos",
-      path: "saved-videos",
-      icon: <FontAwesomeIcon icon={faBookmark} />,
-    },
-    editProfile: {
-      text: "Edit Profile",
-      path: "edit-profile-talent",
-      icon: <FontAwesomeIcon icon={faPenToSquare} />,
-    },
-  };
-
   const settings = [
     "Change Photo",
     "Edit Name",
@@ -93,7 +80,6 @@ export default function EditProfile() {
           </ListGroup>
         </Container>
       </div>
-      <ButtonUpload />
       <EditProfileModal
         isOpen={showModal}
         onClose={handleCloseModal}

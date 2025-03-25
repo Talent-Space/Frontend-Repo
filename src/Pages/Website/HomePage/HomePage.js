@@ -2,10 +2,36 @@ import styles from "./homePage.module.css";
 import WebsiteNavbar from "../Components/WebsiteNavbar/WebsiteNavbar";
 import { ReactComponent as Landing } from "../../../Assets/svgs/landing.svg";
 import Gallery from "../Components/Gallery/Gallery";
-import UploadVideo from "../Components/UploadVideo/UploadPage";
 // import { useState } from "react";
 
-export default function HomePage() {
+export default function HomePage({ bestTalents=null }) {
+
+  let bestTalentsMapping = null;
+  if (bestTalents) {
+    bestTalentsMapping = bestTalents.map((talent) => {
+      // Function to convert Base64 to data URL
+      const getDataUrl = (base64String, mimeType = "image/jpeg") => {
+        if (!base64String) return ""; // Return empty string if no Base64 string
+        return `data:${mimeType};base64,${base64String}`;
+      };
+
+      // Decode the Base64 profile picture
+      const profilePictureUrl = getDataUrl(talent.profilePicture, talent.mimeType);
+
+      return (
+        talent.profilePicture && talent.role === "Talent" ? <div key={talent.id} className={`${styles.talentCard} col-3`}>
+          <img
+            src={profilePictureUrl}
+            alt={`${talent.name}'s profile`}
+            className={`${styles.profilePicture}`}
+          />
+          <h3>{talent.name}</h3>
+          <p>{talent.role}</p>
+        </div> : ""
+      );
+    });
+  }
+
   return (
     <>
       <div className={`${styles.home}`}>
@@ -52,6 +78,14 @@ export default function HomePage() {
         <span className={`${styles.border}`}></span>
 
         {/* Best Talents For Investors (Backend) */}
+        {bestTalents ?
+          <div className="container">
+            <h1>Best Talents</h1>
+            <div className="row gap-3 mt-3 justify-content-center">
+              {bestTalentsMapping}
+            </div>
+          </div> : ""
+        }
 
         <div>
           <Gallery />

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./login.module.css";
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   faEnvelope,
   faLock,
@@ -17,6 +17,8 @@ import Loading from "../../../../Components/Loading/Loading";
 import { LOGIN, baseURL } from "../../../../Api/Api";
 import axios from "axios";
 import Cookie from "cookie-universal";
+import { GoogleLogin } from "@react-oauth/google";
+import ReactFacebookLogin from "react-facebook-login";
 
 export default function Login() {
   // const [email, setEmail] = useState("");
@@ -47,7 +49,7 @@ export default function Login() {
     validateOnChange: true,
     validateOnBlur: true,
 
-    onSubmit: (values) => {},
+    onSubmit: (values) => { },
   });
 
   const handleChange = (e) => {
@@ -68,7 +70,7 @@ export default function Login() {
       setLoading(false);
       const token = res.data.Token;
       const role = res.data.User.role;
-      const go = role === "Admin" ? "/dashboard/users" : "/";
+      const go = role === "Admin" ? "/dashboard/users" : role === "Investor" ? "/homeInvestor" : "/";
       cookie.set("talent-space", token);
       window.location.pathname = `${go}`;
       // console.log(res);
@@ -80,6 +82,61 @@ export default function Login() {
       } else {
         setError("Internal Server Error");
       }
+    }
+  };
+
+  const navigate = useNavigate();
+
+  // Handle Google Sign-In success
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const { credential } = credentialResponse; // Google ID token
+      console.log("Google Credential:", credential); // Debug: Log the credential
+      // Send the ID token to your backend
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/auth/google`,
+        { token: credential },
+        { withCredentials: true }
+      );
+
+      const { token, user } = response.data;
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Google Sign-In failed. Please try again.");
+      console.error("Google Sign-In Error:", err);
+    }
+  };
+
+  // Handle Google Sign-In failure
+  const handleGoogleFailure = (error) => {
+    setError("Google Sign-In failed: " + (error?.details || "Unknown error"));
+    console.error("Google Sign-In Failure:", error);
+  };
+
+  // Handle Facebook Sign-In response
+  const handleFacebookResponse = async (response) => {
+    if (response.status === "unknown") {
+      setError("Facebook Sign-In failed. Please try again.");
+      return;
+    }
+
+    try {
+      const { accessToken } = response;
+      const apiResponse = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/auth/facebook`,
+        { accessToken },
+        { withCredentials: true }
+      );
+
+      const { token, user } = apiResponse.data;
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/dashboard");
+    } catch (err) {
+      setError("Facebook Sign-In failed. Please try again.");
+      console.error("Facebook Sign-In Error:", err);
     }
   };
 
@@ -228,26 +285,28 @@ export default function Login() {
                   )}
 
                   <div className={styles.social}>
-                    <span className={styles["social-info"]}>Or Login With</span>
-                    <div className="d-flex align-items-center justify-content-center gap-5">
-                      <Link
-                        to="https://promotiontalents-cegag6hybkexbgds.uaenorth-01.azurewebsites.net/api/auth/facebook"
-                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
-                      >
-                        <img
-                          src={require("../../../../Assets/Images/facebook.png")}
-                          alt="facebook"
+                    <div className={styles.loginContainer}>
+                      {error && <p className={styles.error}>{error}</p>}
+
+                      <div className={styles.buttonContainer}>
+                        <GoogleLogin
+                          onSuccess={handleGoogleSuccess}
+                          onError={handleGoogleFailure}
+                          text="signin_with"
+                          shape="circle"
+                          theme="outline"
+                          size="large"
+                          ux_mode="popup" // Ensure popup mode is used
                         />
-                      </Link>
-                      <Link
-                        to="https://promotiontalents-cegag6hybkexbgds.uaenorth-01.azurewebsites.net/api/auth/google"
-                        className={`${styles["social-login"]} d-flex align-items-center- justify-content-center`}
-                      >
-                        <img
-                          src={require("../../../../Assets/Images/google.png")}
-                          alt="google"
+
+                        <ReactFacebookLogin
+                          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                          fields="name,email,picture"
+                          callback={handleFacebookResponse}
+                          cssClass={styles.facebookButton}
+                          textButton="Sign in with Facebook"
                         />
-                      </Link>
+                      </div>
                     </div>
                   </div>
                 </div>

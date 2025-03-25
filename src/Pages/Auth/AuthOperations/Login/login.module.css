@@ -261,3 +261,40 @@
     padding: 1rem;
   }
 }
+
+
+/* Google & Facebook  */
+.loginContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.error {
+  color: #dc3545;
+  margin-bottom: 15px;
+}
+
+.facebookButton {
+  background-color: #4267b2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.facebookButton:hover {
+  background-color: #365899;
+}

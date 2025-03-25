@@ -192,16 +192,12 @@ export default function UserInfo() {
             <div className="me-3">
               <strong>941</strong> Following
             </div>
-            <div className="">
+            {userInfo.role === "Talent" ? <div className="">
               <strong style={{ display: "block" }}>3.5</strong>
               <div>
                 <span style={{ display: "inline" }}>Rate</span>
-                {/* <FontAwesomeIcon
-                  icon={faStar}
-                  style={{ color: "gold", marginLeft: "4px" }}
-                /> */}
               </div>
-            </div>
+            </div> : ""}
           </div>
         </div>
       </div>

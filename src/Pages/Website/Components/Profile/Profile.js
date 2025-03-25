@@ -1,48 +1,38 @@
 import styles from "./profile.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SideBar from "../SideBar/SideBar";
 import WebsiteNavbar from "../WebsiteNavbar/WebsiteNavbar";
-import Gallery from "../Gallery/Gallery";
-import { ReactComponent as SavedVideos } from "../../../../Assets/svgs/videos.svg";
-import { ReactComponent as EditProfileImg } from "../../../../Assets/svgs/EditProfile.svg";
 import ButtonUpload from "../UploadButton/ButtonUpload";
-import UserInfo from "../UserInfo/UserInfo";
 import { Outlet } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBookmark,
-  faPenToSquare,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+
+import { Axios } from "../../../../Api/Axios";
+import { USER } from "../../../../Api/Api";
 
 export default function Profile() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [isLogout, setIsLogout] = useState(true);
 
   let screen = true;
-  let user = ["Talent"];
+  const [userRole, setUserRole] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await Axios.get(`/${USER}`);
+        const userData = userResponse.data;
+        setUserRole(userData.role)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
 
-  const itemsSidebar = {
-    myProfile: {
-      text: "My Profile",
-      path: "my-profile",
-      icon: <FontAwesomeIcon icon={faUser} />,
-    },
-    savedVideos: {
-      text: "Saved Videos",
-      path: "saved-videos",
-      icon: <FontAwesomeIcon icon={faBookmark} />,
-    },
-    editProfile: {
-      text: "Edit Profile",
-      path: "edit-profile-talent",
-      icon: <FontAwesomeIcon icon={faPenToSquare} />,
-    },
-  };
+  
 
   return (
     <>
@@ -50,10 +40,10 @@ export default function Profile() {
         <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
         <div className="d-flex gap-1" style={{ marginTop: "80px" }}>
           <div className={`${showSidebar ? styles.show : styles.hide}`}>
-            <SideBar items={itemsSidebar} type={user} logout={isLogout} />
+            <SideBar type={userRole} logout={isLogout} />
           </div>
           <Outlet />
-          <ButtonUpload />
+          {userRole === "Talent" && <ButtonUpload />}
         </div>
       </div>
     </>

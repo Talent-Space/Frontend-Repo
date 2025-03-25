@@ -23,6 +23,8 @@ import Dashboard from "./Pages/Website/Users/Admin/Dashboard/Dashboard";
 import MyProfile from "./Pages/Website/Users/Talent/TalentProfile/MyProfile";
 import UploadPage from "./Pages/Website/Components/UploadVideo/UploadPage";
 import GoogleAuthCallback from "./Pages/Auth/AuthOperations/GoogleAuthCallback/GoogleAuthCallback";
+import Feedbacks from "./Pages/Website/Components/Feedbacks/Feedbacks";
+import PeopleTrains from "./Pages/Website/Components/PeopleTrains/PeopleTrains";
 
 function App() {
   return (
@@ -50,16 +52,19 @@ function App() {
         <Route path="/homeInvestor" element={<HomeInvestor />} />
 
         {/* Talent */}
-        <Route element={<RequireAuth allowedRole={["Talent", "Mentor"]} />}>
+        <Route element={<RequireAuth allowedRole={["Talent", "Mentor", "Investor"]} />}>
           <Route path="/profile" element={<Profile />}>
-            <Route element={<RequireAuth allowedRole={["Talent", "Mentor"]} />}>
-              <Route path="my-profile" element={<MyProfile />} />
+            <Route element={<RequireAuth allowedRole={["Talent"]} />}>
+              <Route path="talent-profile" element={<MyProfile />} />
               <Route path="saved-videos" element={<SavedVideos />} />
               <Route path="edit-profile-talent" element={<EditProfile />} />
               <Route path="upload" element={<UploadPage />} />
             </Route>
             <Route element={<RequireAuth allowedRole={["Mentor"]} />}>
-              <Route path="mentor" element={<MentorProfile />} />
+              <Route path="mentor-profile" element={<MentorProfile />} />
+              <Route path="feedbacks" element={<Feedbacks />} />
+              <Route path="people-trains" element={<PeopleTrains />} />
+              <Route path="edit-profile-mentor" element={<EditProfile />} />
             </Route>
           </Route>
         </Route>
