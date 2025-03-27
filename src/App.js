@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./Pages/Auth/AuthOperations/Login/Login";
 import Register from "./Pages/Auth/AuthOperations/Register/Register";
@@ -41,15 +41,16 @@ function App() {
         </Route>
 
         {/* Main Website Pages */}
-        <Route path="/" element={<HomePage />} />
+        <Route element={<RequireAuth allowedRole={["Investor"]} />}>
+          <Route path="/homeInvestor" element={<HomeInvestor />} />
+        </Route>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/about" element={<About />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/*" element={<Err404 />} />
 
         {/* Reduendent Pages */}
-
-        {/* Investor */}
-        <Route path="/homeInvestor" element={<HomeInvestor />} />
 
         {/* Talent */}
         <Route element={<RequireAuth allowedRole={["Talent", "Mentor", "Investor"]} />}>
@@ -60,11 +61,18 @@ function App() {
               <Route path="edit-profile-talent" element={<EditProfile />} />
               <Route path="upload" element={<UploadPage />} />
             </Route>
+            {/* Mentor */}
             <Route element={<RequireAuth allowedRole={["Mentor"]} />}>
               <Route path="mentor-profile" element={<MentorProfile />} />
               <Route path="feedbacks" element={<Feedbacks />} />
               <Route path="people-trains" element={<PeopleTrains />} />
               <Route path="edit-profile-mentor" element={<EditProfile />} />
+            </Route>
+            {/* Investor */}
+            <Route element={<RequireAuth allowedRole={["Investor"]} />}>
+              <Route path="investor-profile" element={<MentorProfile />} /> {/* create InvestorProfile component */}
+              <Route path="my-investments" element={<Feedbacks />} /> {/* create my investments component */}
+              <Route path="edit-profile-investor" element={<EditProfile />} />
             </Route>
           </Route>
         </Route>

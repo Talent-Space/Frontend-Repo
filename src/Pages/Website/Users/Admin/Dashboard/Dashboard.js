@@ -17,26 +17,26 @@ export default function Dashboard() {
     setShowSidebar(!showSidebar);
   };
 
-  const itemsSidebar = {
-    myProfile: {
-      text: "My Profile",
-      path: "my-profile",
-      role: "Admin",
-      icon: <FontAwesomeIcon icon={faUser} />,
-    },
-    users: {
-      text: "Users",
-      path: "users",
-      role: "Admin",
-      icon: <FontAwesomeIcon icon={faUsers} />,
-    },
-    addUser: {
-      text: "Add User",
-      path: "user/add-user",
-      role: "Admin",
-      icon: <FontAwesomeIcon icon={faUserPlus} />,
-    },
-  };
+  // const itemsSidebar = {
+  //   myProfile: {
+  //     text: "My Profile",
+  //     path: "my-profile",
+  //     role: "Admin",
+  //     icon: <FontAwesomeIcon icon={faUser} />,
+  //   },
+  //   users: {
+  //     text: "Users",
+  //     path: "users",
+  //     role: "Admin",
+  //     icon: <FontAwesomeIcon icon={faUsers} />,
+  //   },
+  //   addUser: {
+  //     text: "Add User",
+  //     path: "user/add-user",
+  //     role: "Admin",
+  //     icon: <FontAwesomeIcon icon={faUserPlus} />,
+  //   },
+  // };
 
   return (
     <>
@@ -44,7 +44,7 @@ export default function Dashboard() {
       <div className={`${styles.dashboard} position-relative`}>
         <div className="d-flex gap-1" style={{ marginTop: "80px" }}>
           <div className={`${showSidebar ? styles.show : styles.hide}`}>
-            <SideBar items={itemsSidebar} type={user} logout={isLogout} />
+            <SideBar type={user} logout={isLogout} />
           </div>
           <Outlet />
         </div>

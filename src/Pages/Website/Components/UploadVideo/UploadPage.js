@@ -160,7 +160,7 @@ const UploadPage = () => {
         filename: selectedFile.name,
         mimeType: selectedFile.type,
         talent_id: userID.id.toString(),
-        title: "Titlee3",
+        title: formValues.title,
         description: formValues.notes,
         tags: formValues.tags,
         city: formValues.city,
@@ -326,6 +326,31 @@ const UploadPage = () => {
                     setFormValues((prev) => ({
                       ...prev,
                       tags: e.target.value,
+                    }));
+                  }}
+                />
+              </div>
+              <div style={{ position: "relative" }}>
+                <FontAwesomeIcon
+                  icon={faUser}
+                  style={{
+                    position: "absolute",
+                    left: "12px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "#666",
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder="Title"
+                  className={styles.input}
+                  style={{ paddingLeft: "2.5rem" }}
+                  value={formValues.title}
+                  onChange={(e) => {
+                    setFormValues((prev) => ({
+                      ...prev,
+                      title: e.target.value,
                     }));
                   }}
                 />

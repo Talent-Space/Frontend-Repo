@@ -55,7 +55,7 @@ export default function WebsiteNavbar(props) {
             <div
               className={`d-flex align-items-center justify-content-between gap-5`}>
               <Link
-                to={"/"}
+                to={currentUser?.role === "Investor" ? "/homeInvestor" : "/home"}
                 className={`${styles.logo} cursor-pointer fw-bold`}>
                 <span
                   className="fw-bold"
@@ -82,7 +82,7 @@ export default function WebsiteNavbar(props) {
                 <ul
                   className={`d-flex align-items-center justify-content-between gap-4`}>
                   <li>
-                    <Link to={currentUser?.role === "Investor" ? "/homeInvestor" : "/"}>Home</Link>
+                    <Link to={currentUser?.role === "Investor" ? "/homeInvestor" : "/home"}>Home</Link>
                   </li>
                   <li>
                     <Link to={"/categories"}>Categories</Link>

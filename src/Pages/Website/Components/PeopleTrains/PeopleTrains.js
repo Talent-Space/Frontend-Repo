@@ -12,6 +12,7 @@ const PeopleTrains = () => {
                 <UserInfo />
                 {/* Second section  */}
                 <h1>PeopleTrains</h1>
+                
             </div>
 
         </>

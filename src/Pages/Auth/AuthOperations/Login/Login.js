@@ -70,7 +70,7 @@ export default function Login() {
       setLoading(false);
       const token = res.data.Token;
       const role = res.data.User.role;
-      const go = role === "Admin" ? "/dashboard/users" : role === "Investor" ? "/homeInvestor" : "/";
+      const go = role === "Admin" ? "/dashboard/users" : role === "Investor" ? "/homeInvestor" : "/home";
       cookie.set("talent-space", token);
       window.location.pathname = `${go}`;
       // console.log(res);

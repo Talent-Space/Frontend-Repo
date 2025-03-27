@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./sidebar.module.css";
-import { faChalkboardUser, faComments, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faChalkboardUser, faComments, faRightFromBracket, faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LOGOUT, USER } from "../../../../Api/Api";
@@ -16,7 +16,7 @@ const itemsSidebar = {
   Talent: {
     myProfile: {
       text: "My Profile",
-      path: "my-profile",
+      path: "talent-profile",
       icon: <FontAwesomeIcon icon={faUser} />,
     },
     savedVideos: {
@@ -50,7 +50,7 @@ const itemsSidebar = {
   Investor: {
     myProfile: {
       text: "My Profile",
-      path: "my-profile",
+      path: "investor-profile",
       icon: <FontAwesomeIcon icon={faUser} />,
     },
     investments: {
@@ -60,8 +60,28 @@ const itemsSidebar = {
     },
     editProfile: {
       text: "Edit Profile",
-      path: "edit-profile",
+      path: "edit-profile-investor",
       icon: <FontAwesomeIcon icon={faPenToSquare} />,
+    },
+  },
+  Admin: {
+    myProfile: {
+      text: "My Profile",
+      path: "my-profile",
+      role: "Admin",
+      icon: <FontAwesomeIcon icon={faUser} />,
+    },
+    users: {
+      text: "Users",
+      path: "users",
+      role: "Admin",
+      icon: <FontAwesomeIcon icon={faUsers} />,
+    },
+    addUser: {
+      text: "Add User",
+      path: "user/add-user",
+      role: "Admin",
+      icon: <FontAwesomeIcon icon={faUserPlus} />,
     },
   },
 };
@@ -105,7 +125,24 @@ export default function SideBar(props) {
   //     </li>
   //   </NavLink>
   // ));
-  const mapItems = Object.keys(userItems).map((key) => (
+  const mapItems = props.categories ? Object.keys(props.items).map((key) => (
+    <NavLink to={props.items[key].path} key={key}>
+      <li
+        key={key}
+        onClick={() => liColor(key)}
+        className={`d-flex align-items-center ${activeKey === key ? styles.activeLi : ""
+          }`}
+        style={{ color: activeKey === key ? "#7939FF" : "" }}
+      >
+        {props.items[key].icon ? (
+          <span className="me-2">{props.items[key].icon}</span>
+        ) : (
+          ""
+        )}
+        {props.items[key].text || props.items[key]}
+      </li>
+    </NavLink>
+  )) : (Object.keys(userItems).map((key) => (
     <NavLink to={userItems[key].path} key={key}>
       <li
         onClick={() => liColor(key)}
@@ -119,7 +156,7 @@ export default function SideBar(props) {
         <span>{userItems[key].text}</span>
       </li>
     </NavLink>
-  ));
+  )));
 
   const handleLogOut = async () => {
     try {

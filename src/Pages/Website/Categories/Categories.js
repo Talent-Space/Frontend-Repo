@@ -7,6 +7,7 @@ import SideBar from "../Components/SideBar/SideBar";
 export default function Categories() {
   const [showSidebar, setShowSidebar] = useState(false);
   let screen = true;
+  let categories = true;
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
@@ -24,12 +25,12 @@ export default function Categories() {
   };
 
   const itemsSidebar = {
-    singing: "Singing",
-    drawing: "Drawing",
-    photography: "Photography",
-    acting: "Acting",
-    writing: "Writing",
-}
+        singing: "Singing",
+        drawing: "Drawing",
+        photography: "Photography",
+        acting: "Acting",
+        writing: "Writing",
+  }
 
   return (
     <>
@@ -37,7 +38,7 @@ export default function Categories() {
         <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
         <div className={`${styles.categories} d-flex align-items-center gap-4`}>
           <div className={`${styles.leftSide} ${showSidebar ? styles.show : styles.hide}`}>
-            <SideBar items={itemsSidebar} />
+            <SideBar categories={true} items={itemsSidebar} />
           </div>
           <div className={`${styles.content}`}>
             <Gallery />
