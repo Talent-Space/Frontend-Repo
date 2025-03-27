@@ -6,7 +6,7 @@ import SideBar from "../Components/SideBar/SideBar";
 
 export default function Categories() {
   const [showSidebar, setShowSidebar] = useState(false);
-  let screen = false;
+  let screen = true;
   let categories = true;
 
   const toggleSidebar = () => {
