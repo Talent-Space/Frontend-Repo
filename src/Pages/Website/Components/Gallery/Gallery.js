@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './gallery.module.css';
 import { baseURL } from '../../../../Api/Api';
+import { Axios } from '../../../../Api/Axios';
 
 export default function Gallery() {
   const [videos, setVideos] = useState([]);
@@ -13,7 +14,7 @@ export default function Gallery() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const response = await axios.get(`${baseURL}/videos`);
+        const response = await Axios.get(`${baseURL}/videos`);
         // console.log(response.data)
         setVideos(response.data);
         setLoading(false);

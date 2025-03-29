@@ -5,10 +5,11 @@ import { baseURL, USER } from "../../../../Api/Api";
 import Cookie from "cookie-universal";
 import { useEffect, useState } from "react";
 import { Axios } from "../../../../Api/Axios";
-import { Modal, Button } from "react-bootstrap";
+import ProfileImageModal from "./ProfileImageModal";
+import ProfileStats from "./ProfileStats";
 
 export default function UserInfo() {
-  const [userInfo, setUserInfo] = useState({
+  const initialUserState = {
     name: "",
     email: "",
     password: "",
@@ -16,8 +17,11 @@ export default function UserInfo() {
     gender: "",
     photo: "",
     role: "",
-    id: ""
-  });
+    id: "",
+    bio: "",
+  };
+
+  const [userInfo, setUserInfo] = useState(initialUserState);
   const [profileInfo, setProfileInfo] = useState({
     address: "",
     bio: "",
@@ -25,7 +29,7 @@ export default function UserInfo() {
   });
   // Initialize with the default profile image
   const defaultProfileImage = require("../../../../Assets/Images/profile.jpg");
-  const [profileImage, setProfileImage] = useState(require("../../../../Assets/Images/profile.jpg"));
+  const [profileImage, setProfileImage] = useState(defaultProfileImage);
   // const [userID, setUserID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -38,7 +42,7 @@ export default function UserInfo() {
     const fetchUserData = async () => {
       setIsLoading(true);
       setError(null);
-      setProfileImage(defaultProfileImage)
+      setProfileImage(defaultProfileImage);
 
       try {
         // Fetch basic user info
@@ -46,15 +50,8 @@ export default function UserInfo() {
         // console.log(userResponse.data)
         const userData = userResponse.data;
         setUserInfo({
-          name: userData.name || "",
-          email: userData.email || "",
-          password: userData.password || "",
-          phone: userData.phone || "",
-          gender: userData.gender || "",
-          photo: userData.photo || "",
-          role: userData.role || "",
-          id: userData.id || "",
-          bio: userData.bio || "",
+          ...initialUserState,
+          ...userData,
         });
         setProfileInfo({
           address: userData.address || "",
@@ -69,7 +66,6 @@ export default function UserInfo() {
         } else {
           // Keep the default image if no profilePicture is available
           setProfileImage(defaultProfileImage);
-
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -82,61 +78,45 @@ export default function UserInfo() {
     fetchUserData();
   }, []);
 
-  const handleAvatarClick = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file.");
       return;
     }
 
     const reader = new FileReader();
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
 
-      Axios.put(`${baseURL}/users/${userInfo.id}`, {
-        profilePicture: base64String,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          console.log("Upload successful:", response.data);
-          // Update profile info with new profile picture
-          setProfileInfo((prev) => ({
-            ...prev,
-            profilePicture: base64String,
-          }));
-          // Update the profile image state with the uploaded image
-          setProfileImage(reader.result); // Full data URL for preview
-          setShowModal(false);
-        })
-        .catch((error) => {
-          console.error("Upload failed:", error);
-          if (error.response) {
-            console.error("Server responded with:", error.response.data);
-            alert(`Upload failed. Server says: ${error.response.data.message || "Check console for details"}`);
-          } else if (error.request) {
-            console.error("No response received:", error.request);
-            alert("Upload failed. No response from server.");
-          } else {
-            console.error("Error setting up the request:", error.message);
-            alert(`Upload failed. Error: ${error.message}`);
-          }
-        });
+      try {
+        await Axios.put(
+          `${baseURL}/users/${userInfo.id}`,
+          { profilePicture: base64String },
+          { headers: { "Content-Type": "application/json" } }
+        );
+
+        setProfileImage(reader.result);
+        setShowModal(false);
+      } catch (error) {
+        handleUploadError(error);
+      }
     };
     reader.readAsDataURL(selectedFile);
+  };
+
+  const handleUploadError = (error) => {
+    console.error("Upload failed:", error);
+    if (error.response) {
+      alert(`Upload failed. Server says: ${error.response.data.message || "Check console for details"}`);
+    } else if (error.request) {
+      alert("Upload failed. No response from server.");
+    } else {
+      alert(`Upload failed. Error: ${error.message}`);
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -148,7 +128,7 @@ export default function UserInfo() {
         <div
           className={`${styles.avatar} col-md-3 text-center mx-4`}
           style={{ width: "223px", height: "223px" }}
-          onClick={handleAvatarClick}
+          onClick={() => setShowModal(true)}
         >
           <img
             src={profileImage}
@@ -171,53 +151,33 @@ export default function UserInfo() {
             <p style={{ color: "#969696", fontSize: "14px" }}>
               Bio: {userInfo.bio || "No Bio"}
             </p>
-            {userInfo.role === "Investor" || userInfo.role === "Mentor" ? <button
-              className="btn mb-3"
-              disabled={userInfo.role === "Admin"}
-              style={{
-                borderRadius: "15px",
-                backgroundColor: "#7939FF",
-                color: "#FFF",
-                width: "80px",
-                opacity: userInfo.role === "Admin" ? 0.6 : 1,
-              }}
-            >
-              Follow
-            </button> : ""}
+            {(userInfo.role === "Investor" || userInfo.role === "Mentor") && (
+              <button
+                className="btn mb-3"
+                disabled={userInfo.role === "Admin"}
+                style={{
+                  borderRadius: "15px",
+                  backgroundColor: "#7939FF",
+                  color: "#FFF",
+                  width: "80px",
+                  opacity: userInfo.role === "Admin" ? 0.6 : 1,
+                }}
+              >
+                Follow
+              </button>
+            )}
           </div>
-          <div className={`${styles.details} d-flex col-md-3 text-center mx-4`}>
-            <div className="me-3">
-              <strong>448</strong> Followers
-            </div>
-            <div className="me-3">
-              <strong>941</strong> Following
-            </div>
-            {userInfo.role === "Talent" ? <div className="">
-              <strong style={{ display: "block" }}>3.5</strong>
-              <div>
-                <span style={{ display: "inline" }}>Rate</span>
-              </div>
-            </div> : ""}
-          </div>
+          
+          <ProfileStats role={userInfo.role} />
         </div>
       </div>
 
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Upload Profile Image</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input type="file" accept="image/*" onChange={handleFileChange} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleUpload}>
-            Upload
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ProfileImageModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        onFileChange={handleFileChange}
+        onUpload={handleUpload}
+      />
     </>
   );
 }

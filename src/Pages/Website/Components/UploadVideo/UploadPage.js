@@ -169,7 +169,7 @@ const UploadPage = () => {
         thumbnail_mimeType: formValues.thumbnail?.type // Include thumbnail MIME type
       };
 
-      const response = await axios.post(`${baseURL}/video/upload`, payload, {
+      const response = await Axios.post(`${baseURL}/video/upload`, payload, {
         headers: {
           'Content-Type': 'application/json',
         },
