@@ -3,18 +3,7 @@ import styles from "./uploadButton.module.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-export default function ButtonUpload() {
-  // const displayFileName = () => {
-  //   const input = document.getElementById("myfile");
-  //   const fileNameDisplay = document.getElementById("file-name");
-
-  //   // Display the name of the selected file
-  //   if (input.files.length > 0) {
-  //     fileNameDisplay.textContent = `Selected File: ${input.files[0].name}`;
-  //   } else {
-  //     fileNameDisplay.textContent = "No file selected";
-  //   }
-  // };
+export default function ButtonUpload({ path }) {
 
   return (
     <>
@@ -28,7 +17,7 @@ export default function ButtonUpload() {
         }}>
         <div>
           <Link
-            to="/profile/upload"
+            to={path}
             className={`${styles["file-label"]}`}
             style={{ cursor: "pointer", textDecoration: "none" }}>
             <FontAwesomeIcon

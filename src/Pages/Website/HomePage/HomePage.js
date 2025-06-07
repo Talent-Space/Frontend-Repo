@@ -5,6 +5,7 @@ import Gallery from "../Components/Gallery/Gallery";
 // import { useState } from "react";
 
 export default function HomePage({ bestTalents=null }) {
+  
 
   let bestTalentsMapping = null;
   if (bestTalents) {

@@ -1,14 +1,13 @@
 import styles from "./userInfo.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { baseURL, USER } from "../../../../Api/Api";
+import { baseURL, FOLLOWERS, FOLLOWING, USER } from "../../../../Api/Api";
 import Cookie from "cookie-universal";
 import { useEffect, useState } from "react";
 import { Axios } from "../../../../Api/Axios";
 import ProfileImageModal from "./ProfileImageModal";
 import ProfileStats from "./ProfileStats";
+import { ThreeDots } from "react-loader-spinner";
 
-export default function UserInfo() {
+export default function UserInfo({ rate }) {
   const initialUserState = {
     name: "",
     email: "",
@@ -21,17 +20,21 @@ export default function UserInfo() {
     bio: "",
   };
 
+  const location = window.location.pathname;
+  // console.log(location);
+
   const [userInfo, setUserInfo] = useState(initialUserState);
+  const [followingStats, setfollowingStats] = useState({});
   const [profileInfo, setProfileInfo] = useState({
     address: "",
     bio: "",
     profilePicture: "",
   });
-  // Initialize with the default profile image
+
   const defaultProfileImage = require("../../../../Assets/Images/profile.jpg");
   const [profileImage, setProfileImage] = useState(defaultProfileImage);
-  // const [userID, setUserID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
   const [error, setError] = useState(null);
   const cookie = Cookie();
   const [showModal, setShowModal] = useState(false);
@@ -47,7 +50,7 @@ export default function UserInfo() {
       try {
         // Fetch basic user info
         const userResponse = await Axios.get(`/${USER}`);
-        // console.log(userResponse.data)
+        // console.log(userResponse.data.id)
         const userData = userResponse.data;
         setUserInfo({
           ...initialUserState,
@@ -57,6 +60,17 @@ export default function UserInfo() {
           address: userData.address || "",
           bio: userData.bio || "",
           profilePicture: userData.profilePicture || defaultProfileImage,
+        });
+
+        const userFollowers = await Axios.get(
+          `/${FOLLOWERS}/${userResponse.data.id}`
+        );
+        const userFollwing = await Axios.get(
+          `/${FOLLOWING}/${userResponse.data.id}`
+        );
+        setfollowingStats({
+          followers: userFollowers.data,
+          following: userFollwing.data,
         });
 
         // Update profile image only if profilePicture exists and is non-empty
@@ -78,6 +92,8 @@ export default function UserInfo() {
     fetchUserData();
   }, []);
 
+  // console.log(followingStats);
+
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
@@ -90,7 +106,9 @@ export default function UserInfo() {
 
     const reader = new FileReader();
     reader.onloadend = async () => {
-      const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+      const base64String = reader.result
+        .replace("data:", "")
+        .replace(/^.+,/, "");
 
       try {
         await Axios.put(
@@ -111,7 +129,11 @@ export default function UserInfo() {
   const handleUploadError = (error) => {
     console.error("Upload failed:", error);
     if (error.response) {
-      alert(`Upload failed. Server says: ${error.response.data.message || "Check console for details"}`);
+      alert(
+        `Upload failed. Server says: ${
+          error.response.data.message || "Check console for details"
+        }`
+      );
     } else if (error.request) {
       alert("Upload failed. No response from server.");
     } else {
@@ -119,7 +141,19 @@ export default function UserInfo() {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <ThreeDots
+        visible={true}
+        height="60"
+        width="60"
+        color="#7939FF"
+        radius="9"
+        ariaLabel="three-dots-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+      />
+    );
   if (error) return <div>{error}</div>;
 
   return (
@@ -139,19 +173,30 @@ export default function UserInfo() {
           />
         </div>
         <div
-          className={`${styles.info} col-md-9 d-flex align-items-center justify-content-evenly`}
+          className={`col-md-9 d-flex align-items-center justify-content-between`}
         >
           <div className={`${styles.bottomPart}`}>
-            <h2>
-              {userInfo.name.charAt(0).toUpperCase() + userInfo.name.slice(1) || "No Name"}
+            <h2 className="text-bold">
+              {userInfo.name.charAt(0).toUpperCase() + userInfo.name.slice(1) ||
+                "No Name"}
             </h2>
             <p style={{ color: "#969696", fontSize: "18px" }}>
-              Role: {userInfo.role || "No Role"}
+              <strong>Role: </strong>
+              <span style={{ color: "#A780F7" }}>
+                {userInfo.role || "No Role"}
+              </span>
             </p>
             <p style={{ color: "#969696", fontSize: "14px" }}>
-              Bio: {userInfo.bio || "No Bio"}
+              <strong>Bio: </strong>
+              <span style={{ color: "#A780F7" }}>
+                {userInfo.bio || "No Bio"}
+              </span>
             </p>
-            {(userInfo.role === "Investor" || userInfo.role === "Mentor") && (
+            {location === "/profile/investor-profile" ||
+            "/profile/talent-profile" ||
+            "/profile/mentor-profile" ? (
+              ""
+            ) : (
               <button
                 className="btn mb-3"
                 disabled={userInfo.role === "Admin"}
@@ -167,8 +212,12 @@ export default function UserInfo() {
               </button>
             )}
           </div>
-          
-          <ProfileStats role={userInfo.role} />
+
+          <ProfileStats
+            rate={rate}
+            role={userInfo.role}
+            followingStats={followingStats}
+          />
         </div>
       </div>
 

@@ -15,7 +15,6 @@
 
 .users {
   /* width: 80%; */
-  height: 100vh;
   margin: 10px auto;
   /* padding: 20px; */
   border-radius: 30px;
@@ -48,11 +47,3 @@
     -o-transform: translateX(1);
   }
 }
-/* 
-@media (max-width: 567px) {
-  .rightSide {
-    margin: 10px 20px 60px;
-    background-color: red !important;
-    width: 100% !important;
-  }
-} */

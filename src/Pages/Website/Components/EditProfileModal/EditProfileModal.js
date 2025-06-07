@@ -87,7 +87,7 @@ export default function EditProfileModal({ isOpen, onClose, onSave }) {
       },
     })
       .then((response) => {
-        console.log("Update successful:", response.data);
+        console.log("Update successful");
         setUserData((prev) => ({
           ...prev,
           ...response.data, // Update with the latest data from the server

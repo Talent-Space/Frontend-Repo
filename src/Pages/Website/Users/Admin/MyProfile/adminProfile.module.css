@@ -1,0 +1,15 @@
+.rightSide {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 20px;
+    width: calc(100% - 340px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -ms-border-radius: 14px;
+    -o-border-radius: 14px;
+}

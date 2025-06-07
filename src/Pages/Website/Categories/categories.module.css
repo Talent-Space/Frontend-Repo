@@ -14,10 +14,18 @@
     height: calc(100vh - 70px);
 }
 
-.content {
-    margin-top: 100px;
-    margin-left: 270px;
-    width: calc(100% - 270px);
+.rightSide {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: calc(100% - 340px);
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+    -moz-border-radius: 14px;
+    -ms-border-radius: 14px;
+    -o-border-radius: 14px;
 }
 
 @media (max-width: 768px) {
@@ -50,7 +58,7 @@
         -moz-transform: translateX(1) !important;
         -ms-transform: translateX(1) !important;
         -o-transform: translateX(1) !important;
-}
+    }
 
     .bars {
         display: none !important;

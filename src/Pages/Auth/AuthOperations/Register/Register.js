@@ -77,7 +77,6 @@ export default function Register() {
       window.location.pathname = "/login";
       // console.log("Success");
     } catch (err) {
-      console.log(err.response);
       setLoading(false);
       if (err.response.status === 422) {
         setError(err.response.data.message);

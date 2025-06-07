@@ -11,8 +11,6 @@ import { USER } from "../../../../Api/Api";
 export default function Profile() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [isLogout, setIsLogout] = useState(true);
-
-  let screen = true;
   const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
@@ -20,7 +18,7 @@ export default function Profile() {
       try {
         const userResponse = await Axios.get(`/${USER}`);
         const userData = userResponse.data;
-        setUserRole(userData.role)
+        setUserRole(userData.role);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -32,18 +30,27 @@ export default function Profile() {
     setShowSidebar(!showSidebar);
   };
 
-  
+  const closeSidebar = () => {
+    setShowSidebar(false);
+  };
 
   return (
     <>
       <div className={`${styles.profile} position-relative`}>
-        <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
+        <WebsiteNavbar screen={true} onToggleSidebar={toggleSidebar} />
         <div className="d-flex gap-1" style={{ marginTop: "80px" }}>
-          <div className={`${showSidebar ? styles.show : styles.hide}`}>
-            <SideBar type={userRole} logout={isLogout} />
+          <SideBar 
+            type={userRole} 
+            logout={isLogout} 
+            isOpen={showSidebar}
+            onClose={closeSidebar}
+          />
+          <div
+            className={`${styles.rightSide}`}
+            style={{ backgroundColor: "#FFF" }}
+          >
+            <Outlet />
           </div>
-          <Outlet />
-          {userRole === "Talent" && <ButtonUpload />}
         </div>
       </div>
     </>

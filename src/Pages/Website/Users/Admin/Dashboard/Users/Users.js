@@ -38,7 +38,7 @@ export default function Users() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [users]);
 
   // Delete User
   const handleDelete = async (id) => {

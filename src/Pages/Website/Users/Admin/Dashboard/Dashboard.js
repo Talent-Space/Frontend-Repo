@@ -17,27 +17,6 @@ export default function Dashboard() {
     setShowSidebar(!showSidebar);
   };
 
-  // const itemsSidebar = {
-  //   myProfile: {
-  //     text: "My Profile",
-  //     path: "my-profile",
-  //     role: "Admin",
-  //     icon: <FontAwesomeIcon icon={faUser} />,
-  //   },
-  //   users: {
-  //     text: "Users",
-  //     path: "users",
-  //     role: "Admin",
-  //     icon: <FontAwesomeIcon icon={faUsers} />,
-  //   },
-  //   addUser: {
-  //     text: "Add User",
-  //     path: "user/add-user",
-  //     role: "Admin",
-  //     icon: <FontAwesomeIcon icon={faUserPlus} />,
-  //   },
-  // };
-
   return (
     <>
       <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />

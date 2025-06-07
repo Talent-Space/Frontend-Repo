@@ -37,8 +37,9 @@ export default function AddUser() {
   return (
     <>
       {loading ? <Loading /> : ""}
+      <div className={`${styles.rightSide} bg-white mt-2`}>
       <div className={`${styles.user} bg-white mt-2`}>
-        <h1>Edit User Page:</h1>
+        <h1>Add User Page:</h1>
         <Form className="bg-white w-100 mx-2 p-3" onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Name</Form.Label>
@@ -112,6 +113,7 @@ export default function AddUser() {
             Save
           </Button>
         </Form>
+      </div>
       </div>
     </>
   );

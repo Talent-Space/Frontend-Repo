@@ -1,0 +1,37 @@
+.second {
+    width: 60%;
+}
+
+.card {
+    padding: 30px;
+    border-radius: 10px;
+    border: 3px solid #7939FF !important;
+}
+
+@media (max-width: 1200px) {
+    .second {
+        width: 80%;
+    }
+    
+}
+
+@media (max-width: 992px) {
+    .second {
+        width: 90%;
+        padding: 20px;
+    }
+    .cardBody {
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+}
+
+@media (max-width: 768px) {
+    .second {
+        width: 100%;
+        padding: 10px;
+    }
+    
+}

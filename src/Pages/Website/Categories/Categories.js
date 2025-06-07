@@ -3,6 +3,15 @@ import Gallery from "../Components/Gallery/Gallery";
 import WebsiteNavbar from "../Components/WebsiteNavbar/WebsiteNavbar";
 import styles from "./categories.module.css";
 import SideBar from "../Components/SideBar/SideBar";
+import {
+  faCameraRetro,
+  faChildReaching,
+  faMusic,
+  faPencil,
+  faWandMagicSparkles,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Outlet } from "react-router-dom";
 
 export default function Categories() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -25,23 +34,50 @@ export default function Categories() {
   };
 
   const itemsSidebar = {
-        singing: "Singing",
-        drawing: "Drawing",
-        photography: "Photography",
-        acting: "Acting",
-        writing: "Writing",
-  }
+    singing: {
+      text: "Singing",
+      path: "singing",
+      icon: <FontAwesomeIcon icon={faMusic} />,
+    },
+    drawing: {
+      text: "Drawing",
+      path: "drawing",
+      icon: <FontAwesomeIcon icon={faWandMagicSparkles} />,
+    },
+    photography: {
+      text: "Photography",
+      path: "photography",
+      icon: <FontAwesomeIcon icon={faCameraRetro} />,
+    },
+    acting: {
+      text: "Acting",
+      path: "acting",
+      icon: <FontAwesomeIcon icon={faChildReaching} />,
+    },
+    writing: {
+      text: "Writing",
+      path: "writing",
+      icon: <FontAwesomeIcon icon={faPencil} />,
+    },
+  };
 
   return (
     <>
       <div className={`${styles.categories}`}>
         <WebsiteNavbar screen={screen} onToggleSidebar={toggleSidebar} />
-        <div className={`${styles.categories} d-flex align-items-center gap-4`}>
-          <div className={`${styles.leftSide} ${showSidebar ? styles.show : styles.hide}`}>
+        <div className={`${styles.categories} d-flex gap-1`} style={{ marginTop: "80px" }}>
+          <div
+            className={`${
+              showSidebar ? styles.show : styles.hide
+            }`}
+          >
             <SideBar categories={true} items={itemsSidebar} />
           </div>
-          <div className={`${styles.content}`}>
-            <Gallery />
+          <div
+            className={`${styles.rightSide}`}
+            style={{ backgroundColor: "#FFF" }}
+          >
+            <Outlet />
           </div>
         </div>
       </div>

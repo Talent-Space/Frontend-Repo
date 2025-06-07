@@ -1,0 +1,54 @@
+.videoCardSkeleton {
+    background: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.videoSkeleton {
+    position: relative;
+    padding-top: 56.25%;
+    /* 16:9 aspect ratio */
+    background: linear-gradient(90deg, #f5f5f5 25%, #e0e0e0 50%, #f5f5f5 75%);
+    background-size: 200% 100%;
+}
+
+.infoSkeleton {
+    padding: 15px;
+}
+
+.titleSkeleton,
+.descriptionSkeleton,
+.metaSkeleton {
+    background: linear-gradient(90deg, #f5f5f5 25%, #e0e0e0 50%, #f5f5f5 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    height: 20px;
+    margin-bottom: 10px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.titleSkeleton {
+    width: 70%;
+}
+
+.descriptionSkeleton {
+    width: 90%;
+    height: 15px;
+}
+
+.metaSkeleton {
+    width: 50%;
+    height: 15px;
+}
+
+/* Animation for skeleton effect */
+@keyframes pulse {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

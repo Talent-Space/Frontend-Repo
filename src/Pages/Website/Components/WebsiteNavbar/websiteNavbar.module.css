@@ -75,18 +75,98 @@
 }
 
 .nav-links ul a:hover,
-.nav-icons a:hover {
+.nav-icons button:hover {
     color: #7939FF;
     cursor: pointer;
 }
 
 .nav-links ul a,
-.nav-icons a {
+.nav-icons button {
     color: gray;
     font-size: 18px;
+    font-weight: bold;
+}
+
+.bellButton {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.notificationsCount {
+    position: absolute;
+    font-size: 12px;
+    border-radius: 50%;
+    background-color: red;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    color: white;
+    right: -8px;
 }
 
 
+.notificationDropdown {
+    position: absolute;
+    top: 150%;
+    right: 0;
+    width: 400px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+/* Sticky header for filter buttons */
+.notificationFilterButtons {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    border-bottom: 1px solid #eee;
+}
+
+.notificationFilterButtons button {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.notificationFilterButtons button:hover {
+    color: #7939FF;
+}
+
+.notificationList {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+/* Add smooth transition for notification filtering */
+.notification {
+    transition: all 0.3s ease;
+}
+
+/* Add a subtle animation when switching between filters */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notificationList > div {
+    animation: fadeIn 0.3s ease-out;
+}
 
 /* Responsive */
 @media (max-width: 1200px) {
@@ -105,6 +185,7 @@
     .web-nav {
         padding: 10px 20px;
     }
+
     .bars {
         display: block;
     }

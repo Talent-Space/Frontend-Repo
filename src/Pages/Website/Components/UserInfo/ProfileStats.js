@@ -1,22 +1,48 @@
+import { Link } from "react-router-dom";
 import styles from "./userInfo.module.css";
 
-export default function ProfileStats({ role }) {
+export default function ProfileStats({
+  page,
+  rate = "0",
+  role,
+  followingStats = {
+    followers: { followers: [] },
+    following: { following: [] },
+  },
+}) {
+  const followersCount = followingStats?.followers?.followers?.length || 0;
+  const followingCount = followingStats?.following?.following?.length || 0;
+
   return (
     <div className={`${styles.details} d-flex col-md-3 text-center mx-4`}>
-      <div className="me-3">
-        <strong>448</strong> Followers
+      <div>
+        <strong style={{ color: "#A780F7" }}>{followersCount}</strong>{" "}
+        <strong> Followers</strong>
       </div>
-      <div className="me-3">
-        <strong>941</strong> Following
+      <div>
+        <strong style={{ color: "#A780F7" }}>{followingCount}</strong>{" "}
+        <strong> Following</strong>
       </div>
       {role === "Talent" && (
         <div className="">
-          <strong style={{ display: "block" }}>3.5</strong>
-          <div>
-            <span style={{ display: "inline" }}>Rate</span>
-          </div>
+          {page === "userProfile" ? (
+            <span
+              style={{ color: "#A780F7", fontWeight: "bold" }}
+            >
+              {rate}
+            </span>
+          ) : (
+            <Link
+              to={"/profile/reviews"}
+              className={`${styles.linkRate}`}
+              style={{ color: "#A780F7", fontWeight: "bold" }}
+            >
+              {rate}
+            </Link>
+          )}
+          <strong> Rate</strong>
         </div>
       )}
     </div>
   );
-} 
+}

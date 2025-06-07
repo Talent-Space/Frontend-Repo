@@ -18,12 +18,9 @@ import { LOGIN, baseURL } from "../../../../Api/Api";
 import axios from "axios";
 import Cookie from "cookie-universal";
 import { GoogleLogin } from "@react-oauth/google";
-import ReactFacebookLogin from "react-facebook-login";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
   const [form, setForm] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -90,22 +87,47 @@ export default function Login() {
   // Handle Google Sign-In success
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const { credential } = credentialResponse; // Google ID token
-      console.log("Google Credential:", credential); // Debug: Log the credential
-      // Send the ID token to your backend
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/auth/google`,
-        { token: credential },
-        { withCredentials: true }
+      const { credential } = credentialResponse; 
+      console.log("Google Credential:", credential); 
+
+      const resDecoded = jwtDecode(credential);
+      console.log("Google Credential Decoded:", resDecoded);
+
+      const response = await axios.get(
+        `${baseURL}/auth/google?token=${encodeURIComponent(credential)}`,
+        {
+          withCredentials: true,
+          timeout: 10000, 
+        }
       );
 
       const { token, user } = response.data;
+      console.log("Backend Response:", response.data);
+
       localStorage.setItem("authToken", token);
       localStorage.setItem("user", JSON.stringify(user));
-      navigate("/dashboard");
+
+      navigate("/home");
     } catch (err) {
-      setError("Google Sign-In failed. Please try again.");
+      setError("Google Sign-In failed. Please check your network or try again later.");
       console.error("Google Sign-In Error:", err);
+
+      if (err.code === "ERR_NETWORK") {
+        console.error("Network Error Details:", {
+          message: err.message,
+          url: err.config.url,
+          method: err.config.method,
+        });
+      } else if (err.response) {
+        console.error("Backend Error Response:", err.response.data);
+        setError(`Google Sign-In failed: ${err.response.data.message || "Server error"}`);
+      } else if (err.request) {
+        console.error("No response received:", err.request);
+        setError("Google Sign-In failed: No response from server.");
+      } else {
+        console.error("Error setting up request:", err.message);
+        setError(`Google Sign-In failed: ${err.message}`);
+      }
     }
   };
 
@@ -115,30 +137,7 @@ export default function Login() {
     console.error("Google Sign-In Failure:", error);
   };
 
-  // Handle Facebook Sign-In response
-  const handleFacebookResponse = async (response) => {
-    if (response.status === "unknown") {
-      setError("Facebook Sign-In failed. Please try again.");
-      return;
-    }
 
-    try {
-      const { accessToken } = response;
-      const apiResponse = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/auth/facebook`,
-        { accessToken },
-        { withCredentials: true }
-      );
-
-      const { token, user } = apiResponse.data;
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Facebook Sign-In failed. Please try again.");
-      console.error("Facebook Sign-In Error:", err);
-    }
-  };
 
   return (
     <>
@@ -296,15 +295,7 @@ export default function Login() {
                           shape="circle"
                           theme="outline"
                           size="large"
-                          ux_mode="popup" // Ensure popup mode is used
-                        />
-
-                        <ReactFacebookLogin
-                          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                          fields="name,email,picture"
-                          callback={handleFacebookResponse}
-                          cssClass={styles.facebookButton}
-                          textButton="Sign in with Facebook"
+                          ux_mode="popup"
                         />
                       </div>
                     </div>

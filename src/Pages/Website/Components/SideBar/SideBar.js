@@ -1,7 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./sidebar.module.css";
-import { faChalkboardUser, faComments, faRightFromBracket, faUserPlus, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, useNavigate } from "react-router-dom";
+import {
+  faCertificate,
+  faChalkboardUser,
+  faComments,
+  faRightFromBracket,
+  faUserPlus,
+  faUsers,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LOGOUT, USER } from "../../../../Api/Api";
 import Cookie from "cookie-universal";
@@ -10,6 +18,7 @@ import {
   faBookmark,
   faPenToSquare,
   faUser,
+  faScroll,
 } from "@fortawesome/free-solid-svg-icons";
 
 const itemsSidebar = {
@@ -23,6 +32,16 @@ const itemsSidebar = {
       text: "Saved Videos",
       path: "saved-videos",
       icon: <FontAwesomeIcon icon={faBookmark} />,
+    },
+    certificates: {
+      text: "Certificates",
+      path: "certificates",
+      icon: <FontAwesomeIcon icon={faCertificate} />,
+    },
+    comingOffers: {
+      text: "Coming Offers",
+      path: "coming-offers",
+      icon: <FontAwesomeIcon icon={faScroll} />,
     },
     editProfile: {
       text: "Edit Profile",
@@ -49,7 +68,7 @@ const itemsSidebar = {
   },
   Investor: {
     myProfile: {
-      text: "My Profile",
+      text: "People Investination",
       path: "investor-profile",
       icon: <FontAwesomeIcon icon={faUser} />,
     },
@@ -65,12 +84,6 @@ const itemsSidebar = {
     },
   },
   Admin: {
-    myProfile: {
-      text: "My Profile",
-      path: "my-profile",
-      role: "Admin",
-      icon: <FontAwesomeIcon icon={faUser} />,
-    },
     users: {
       text: "Users",
       path: "users",
@@ -83,6 +96,12 @@ const itemsSidebar = {
       role: "Admin",
       icon: <FontAwesomeIcon icon={faUserPlus} />,
     },
+    comingOffers: {
+      text: "Pending Offers",
+      path: "pending-offers",
+      role: "Admin",
+      icon: <FontAwesomeIcon icon={faScroll} />,
+    },
   },
 };
 
@@ -93,6 +112,7 @@ export default function SideBar(props) {
   const [activeKey, setActiveKey] = useState(null);
   const [user, setUser] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Get User
   useEffect(() => {
@@ -107,56 +127,48 @@ export default function SideBar(props) {
     setActiveKey(key);
   };
 
-  // const mapItems = Object.keys(props.items).map((key) => (
-  //   <NavLink to={props.items[key].path} key={key}>
-  //     <li
-  //       key={key}
-  //       onClick={() => liColor(key)}
-  //       className={`d-flex align-items-center ${activeKey === key ? styles.activeLi : ""
-  //         }`}
-  //       style={{ color: activeKey === key ? "#7939FF" : "" }}
-  //     >
-  //       {props.items[key].icon ? (
-  //         <span className="me-2">{props.items[key].icon}</span>
-  //       ) : (
-  //         ""
-  //       )}
-  //       {props.items[key].text || props.items[key]}
-  //     </li>
-  //   </NavLink>
-  // ));
-  const mapItems = props.categories ? Object.keys(props.items).map((key) => (
-    <NavLink to={props.items[key].path} key={key}>
-      <li
-        key={key}
-        onClick={() => liColor(key)}
-        className={`d-flex align-items-center ${activeKey === key ? styles.activeLi : ""
-          }`}
-        style={{ color: activeKey === key ? "#7939FF" : "" }}
-      >
-        {props.items[key].icon ? (
-          <span className="me-2">{props.items[key].icon}</span>
-        ) : (
-          ""
-        )}
-        {props.items[key].text || props.items[key]}
-      </li>
-    </NavLink>
-  )) : (Object.keys(userItems).map((key) => (
-    <NavLink to={userItems[key].path} key={key}>
-      <li
-        onClick={() => liColor(key)}
-        className={`d-flex align-items-center ${activeKey === key ? styles.activeLi : ""
-          }`}
-        style={{ color: activeKey === key ? "#7939FF" : "" }}
-      >
-        {userItems[key].icon && (
-          <span className="me-2">{userItems[key].icon}</span>
-        )}
-        <span>{userItems[key].text}</span>
-      </li>
-    </NavLink>
-  )));
+  const currentPath = location.pathname.split("/").pop();
+
+  const mapItems = props.categories
+    ? Object.keys(props.items).map((key) => (
+        <NavLink to={props.items[key].path} key={key}>
+          <li
+            key={key}
+            onClick={() => liColor(key)}
+            className={`d-flex align-items-center ${
+              currentPath === props.items[key].path ? styles.activeLi : ""
+            }`}
+            style={{
+              color: currentPath === props.items[key].path ? "#7939FF" : "",
+            }}
+          >
+            {props.items[key].icon ? (
+              <span className="me-2">{props.items[key].icon}</span>
+            ) : (
+              ""
+            )}
+            {props.items[key].text || props.items[key]}
+          </li>
+        </NavLink>
+      ))
+    : Object.keys(userItems).map((key) => (
+        <NavLink to={userItems[key].path} key={key}>
+          <li
+            onClick={() => liColor(key)}
+            className={`d-flex align-items-center ${
+              currentPath === userItems[key].path ? styles.activeLi : ""
+            }`}
+            style={{
+              color: currentPath === userItems[key].path ? "#7939FF" : "",
+            }}
+          >
+            {userItems[key].icon && (
+              <span className="me-2">{userItems[key].icon}</span>
+            )}
+            <span>{userItems[key].text}</span>
+          </li>
+        </NavLink>
+      ));
 
   const handleLogOut = async () => {
     try {
@@ -175,7 +187,16 @@ export default function SideBar(props) {
 
   return (
     <>
-      <div className={`${styles.sidebar} d-flex align-items-center`}>
+      <div className={`${styles.sidebar} ${props.isOpen ? styles.open : ''} d-flex align-items-center`}>
+        {props.isOpen && (
+          <button 
+            onClick={props.onClose}
+            className="d-md-none position-absolute top-0 end-0 m-3"
+            style={{ background: 'none', border: 'none', fontSize: '24px' }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        )}
         <div className={`${styles.topImage}`}>
           <img
             src={require("../../../../Assets/Images/Group 2.png")}

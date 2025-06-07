@@ -10,10 +10,10 @@ import {
   faUser,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import { baseURL, USER } from "../../../../Api/Api";
+import { baseURL, USER, VIDEO } from "../../../../Api/Api";
 import { Axios } from "../../../../Api/Axios";
-import styled from 'styled-components';
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const ProgressBar = styled.div`
   width: 100%;
@@ -25,7 +25,7 @@ const ProgressBar = styled.div`
 `;
 
 const ProgressFill = styled.div`
-  width: ${props => props.progress}%;
+  width: ${(props) => props.progress}%;
   height: 100%;
   background-color: #007bff;
   transition: width 0.3s ease-in-out;
@@ -33,7 +33,7 @@ const ProgressFill = styled.div`
 
 const StatusMessage = styled.p`
   margin-top: 20px;
-  color: ${props => props.error ? '#dc3545' : '#28a745'};
+  color: ${(props) => (props.error ? "#dc3545" : "#28a745")};
 `;
 
 const UploadPage = () => {
@@ -51,9 +51,10 @@ const UploadPage = () => {
   const [userID, setUserID] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [statusMessage, setStatusMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -75,7 +76,7 @@ const UploadPage = () => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onload = () => resolve(reader.result.split(",")[1]);
       reader.onerror = (error) => reject(error);
     });
   };
@@ -96,9 +97,9 @@ const UploadPage = () => {
         setStatusMessage(`Selected thumbnail: ${file.name}`);
         setError(false);
       } catch (err) {
-        setStatusMessage('Failed to encode thumbnail');
+        setStatusMessage("Failed to encode thumbnail");
         setError(true);
-        console.error('Thumbnail encoding error:', err);
+        console.error("Thumbnail encoding error:", err);
       }
     }
   };
@@ -112,14 +113,16 @@ const UploadPage = () => {
         ...prev,
         videoPreview: videoUrl,
       }));
-      if (!file.type.startsWith('video/')) {
-        setStatusMessage('Please select a valid video file');
+      if (!file.type.startsWith("video/")) {
+        setStatusMessage("Please select a valid video file");
         setError(true);
         return;
       }
       const MAX_FILE_SIZE = 100 * 1024 * 1024;
       if (file.size > MAX_FILE_SIZE) {
-        setStatusMessage(`File size exceeds ${MAX_FILE_SIZE / (1024 * 1024)}MB limit`);
+        setStatusMessage(
+          `File size exceeds ${MAX_FILE_SIZE / (1024 * 1024)}MB limit`
+        );
         setError(true);
         return;
       }
@@ -140,18 +143,18 @@ const UploadPage = () => {
   // Handle upload
   const handleUpload = async () => {
     if (!selectedFile) {
-      setStatusMessage('Please select a video file first');
+      setStatusMessage("Please select a video file first");
       setError(true);
       return;
     }
 
     setIsProcessing(true);
     setError(false);
-    setStatusMessage('Encoding files to Base64...');
+    setStatusMessage("Encoding files to Base64...");
 
     try {
       const base64Video = await fileToBase64(selectedFile);
-      setStatusMessage('Uploading encoded files...');
+      setStatusMessage("Uploading encoded files...");
 
       const formattedDate = formatDate(formValues.date);
 
@@ -166,20 +169,22 @@ const UploadPage = () => {
         city: formValues.city,
         date: formattedDate,
         thumbnail: formValues.thumbnailBase64, // Send Base64 encoded thumbnail
-        thumbnail_mimeType: formValues.thumbnail?.type // Include thumbnail MIME type
+        thumbnail_mimeType: formValues.thumbnail?.type, // Include thumbnail MIME type
       };
 
-      const response = await Axios.post(`${baseURL}/video/upload`, payload, {
+      const response = await Axios.post(`${baseURL}/${VIDEO}/upload`, payload, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         onUploadProgress: (progressEvent) => {
-          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
           setUploadProgress(progress);
         },
       });
 
-      setStatusMessage('Video uploaded successfully!');
+      setStatusMessage("Video uploaded successfully!");
       setSelectedFile(null);
       setFormValues({
         title: "",
@@ -193,12 +198,15 @@ const UploadPage = () => {
         video: null,
       });
       setUploadProgress(0);
+      navigate("/profile/talent-profile");
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error("Upload error:", error);
       if (error.response) {
-        setStatusMessage(`Upload failed: ${error.response.data.message || 'Server error'}`);
+        setStatusMessage(
+          `Upload failed: ${error.response.data.message || "Server error"}`
+        );
       } else if (error.request) {
-        setStatusMessage('Upload failed: Network error');
+        setStatusMessage("Upload failed: Network error");
       } else {
         setStatusMessage(`Upload failed: ${error.message}`);
       }
@@ -211,308 +219,322 @@ const UploadPage = () => {
 
   return (
     <>
-      <div className={styles.container}>
+      <div className={`${styles.uploadPage}`}>
         <h1> Upload Page </h1>
-        <div className={styles.cardContainer}>
-          <div className={styles.card}>
-            <div className={styles.imageContainer}>
-              <div className={styles.iconBox}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="imageUpload"
-                  style={{ display: "none" }}
-                  onChange={handleThumbnailChange} // Updated handler
-                  disabled={isProcessing}
-                />
-                <label
-                  htmlFor="imageUpload"
-                  style={{
-                    cursor: "pointer",
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {formValues.imagePreview ? (
-                    <img
-                      src={formValues.imagePreview}
-                      alt="Preview"
+        <div className={styles.container}>
+          <div className={styles.cardContainer}>
+            <div className={styles.card}>
+              <div className={styles.imageContainer}>
+                <div className={styles.iconBox}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="imageUpload"
+                    style={{ display: "none" }}
+                    onChange={handleThumbnailChange} // Updated handler
+                    disabled={isProcessing}
+                  />
+                  <label
+                    htmlFor="imageUpload"
+                    style={{
+                      cursor: "pointer",
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {formValues.imagePreview ? (
+                      <img
+                        src={formValues.imagePreview}
+                        alt="Preview"
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className={`${styles.icon}`}
+                        icon={faCamera}
+                      />
+                    )}
+                  </label>
+                </div>
+                <div className={styles.iconBox}>
+                  <input
+                    type="file"
+                    accept="video/*"
+                    id="videoUpload"
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                    disabled={isProcessing}
+                  />
+                  <label
+                    htmlFor="videoUpload"
+                    style={{
+                      cursor: "pointer",
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {formValues.videoPreview ? (
+                      <video
+                        src={formValues.videoPreview}
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "100%",
+                          objectFit: "contain",
+                        }}
+                        controls
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        className={`${styles.icon}`}
+                        icon={faVideo}
+                      />
+                    )}
+                  </label>
+                </div>
+              </div>
+              {statusMessage && (
+                <StatusMessage error={error}>{statusMessage}</StatusMessage>
+              )}
+              {isProcessing && uploadProgress > 0 && (
+                <ProgressBar>
+                  <ProgressFill progress={uploadProgress} />
+                </ProgressBar>
+              )}
+              {/* ... (form remains the same) */}
+              <form className={styles.form}>
+                <div style={{ position: "relative" }}>
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    style={{
+                      position: "absolute",
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "#666",
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    className={styles.input}
+                    style={{ paddingLeft: "2.5rem" }}
+                    value={formValues.title}
+                    onChange={(e) => {
+                      setFormValues((prev) => ({
+                        ...prev,
+                        title: e.target.value,
+                      }));
+                    }}
+                  />
+                </div>
+                <div style={{ position: "relative" }}>
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    style={{
+                      position: "absolute",
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "#666",
+                    }}
+                  />
+                  <select
+                    className={styles.input}
+                    style={{ paddingLeft: "2.5rem" }}
+                    value={formValues.tags}
+                    onChange={(e) => {
+                      setFormValues((prev) => ({
+                        ...prev,
+                        tags: e.target.value,
+                      }));
+                    }}
+                  >
+                    <option value=""> Tags </option>
+                    <option value="Singing"> Singing </option>
+                    <option value="Drawing"> Drawing </option>
+                    <option value="Photography"> Photography </option>
+                    <option value="Acting"> Acting </option>
+                    <option value="Writing"> Writing </option>
+                  </select>
+                </div>
+                <div style={{ position: "relative" }}>
+                  <FontAwesomeIcon
+                    icon={faCalendar}
+                    style={{
+                      position: "absolute",
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "#666",
+                    }}
+                  />
+                  <input
+                    type="date"
+                    placeholder="Date"
+                    className={styles.input}
+                    style={{ paddingLeft: "2.5rem" }}
+                    value={formValues.date}
+                    onChange={(e) => {
+                      setFormValues((prev) => ({
+                        ...prev,
+                        date: e.target.value,
+                      }));
+                    }}
+                  />
+                </div>
+                <div className={styles.row}>
+                  <div style={{ position: "relative" }}>
+                    <FontAwesomeIcon
+                      icon={faLocationDot}
                       style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%",
-                        objectFit: "contain",
+                        position: "absolute",
+                        left: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "#666",
                       }}
                     />
-                  ) : (
+                    <select
+                      className={styles.select}
+                      style={{ paddingLeft: "2.5rem" }}
+                      value={formValues.city}
+                      onChange={(e) => {
+                        setFormValues((prev) => ({
+                          ...prev,
+                          city: e.target.value,
+                        }));
+                      }}
+                    >
+                      {/* ... (city options remain the same) */}
+                      <option value=""> City </option>
+                      <option value="Cairo"> Cairo </option>
+                      <option value="Alexandria"> Alexandria </option>
+                      <option value="Giza"> Giza </option>
+                      <option value="Shubra El Kheima">
+                        {" "}
+                        Shubra El Kheima{" "}
+                      </option>
+                      <option value="Port Said"> Port Said </option>
+                      <option value="Suez"> Suez </option>
+                      <option value="Mansoura"> Mansoura </option>
+                      <option value="Mahalla"> Mahalla </option>
+                      <option value="Tanta"> Tanta </option>
+                      <option value="Asyut"> Asyut </option>
+                      <option value="Ismailia"> Ismailia </option>
+                      <option value="Faiyum"> Faiyum </option>
+                      <option value="Zagazig"> Zagazig </option>
+                      <option value="Damietta"> Damietta </option>
+                      <option value="Aswan"> Aswan </option>
+                      <option value="Minya"> Minya </option>
+                      <option value="Damanhur"> Damanhur </option>
+                      <option value="Beni Suef"> Beni Suef </option>
+                      <option value="Qena"> Qena </option>
+                      <option value="Sohag"> Sohag </option>
+                      <option value="Hurghada"> Hurghada </option>
+                      <option value="6th of October City">
+                        {" "}
+                        6th of October City{" "}
+                      </option>
+                      <option value="Shibin El Kom"> Shibin El Kom </option>
+                      <option value="Banha"> Banha </option>
+                      <option value="Kafr El Sheikh"> Kafr El Sheikh </option>
+                      <option value="Arish"> Arish </option>
+                      <option value="Mallawi"> Mallawi </option>
+                      <option value="10th of Ramadan City">
+                        {" "}
+                        10th of Ramadan City{" "}
+                      </option>
+                      <option value="Bilbais"> Bilbais </option>
+                      <option value="Marsa Matruh"> Marsa Matruh </option>
+                      <option value="Idfu"> Idfu </option>
+                      <option value="Mit Ghamr"> Mit Ghamr </option>
+                      <option value="Al-Hamidiyya"> Al-Hamidiyya </option>
+                      <option value="Desouk"> Desouk </option>
+                      <option value="Qalyub"> Qalyub </option>
+                      <option value="Abu Kabir"> Abu Kabir </option>
+                      <option value="Kafr el-Dawwar"> Kafr el-Dawwar </option>
+                      <option value="Girga"> Girga </option>
+                      <option value="Akhmim"> Akhmim </option>
+                      <option value="Matareya"> Matareya </option>
+                      <option value="Manfalut"> Manfalut </option>
+                      <option value="Qaha"> Qaha </option>
+                      <option value="New Cairo"> New Cairo </option>
+                    </select>
+                  </div>
+                  <div style={{ position: "relative" }}>
                     <FontAwesomeIcon
-                      className={`${styles.icon}`}
-                      icon={faCamera}
+                      icon={faSmile}
+                      style={{
+                        position: "absolute",
+                        left: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "#666",
+                      }}
                     />
-                  )}
-                </label>
-              </div>
-              <div className={styles.iconBox}>
-                <input
-                  type="file"
-                  accept="video/*"
-                  id="videoUpload"
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                  disabled={isProcessing}
-                />
-                <label
-                  htmlFor="videoUpload"
+                    <select
+                      className={styles.select}
+                      style={{ paddingLeft: "2.5rem" }}
+                      value={formValues.feelings}
+                      onChange={(e) => {
+                        setFormValues((prev) => ({
+                          ...prev,
+                          feelings: e.target.value,
+                        }));
+                      }}
+                    >
+                      <option value=""> Feeling </option>
+                      <option value="happy"> Happy </option>
+                      <option value="sad"> Sad </option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{ position: "relative" }}>
+                  <FontAwesomeIcon
+                    icon={faFilePen}
+                    style={{
+                      position: "absolute",
+                      left: "12px",
+                      top: "27px",
+                      color: "#666",
+                    }}
+                  />
+                  <textarea
+                    placeholder="Notes"
+                    className={styles.textarea}
+                    style={{ paddingLeft: "2.5rem" }}
+                    value={formValues.notes}
+                    onChange={(e) => {
+                      setFormValues((prev) => ({
+                        ...prev,
+                        notes: e.target.value,
+                      }));
+                    }}
+                  ></textarea>
+                </div>
+                <button
+                  onClick={handleUpload}
+                  disabled={!selectedFile || isProcessing}
+                  type="submit"
+                  className={styles.button}
                   style={{
-                    cursor: "pointer",
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    opacity: !selectedFile || isProcessing ? 0.6 : 1,
                   }}
                 >
-                  {formValues.videoPreview ? (
-                    <video
-                      src={formValues.videoPreview}
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%",
-                        objectFit: "contain",
-                      }}
-                      controls
-                    />
-                  ) : (
-                    <FontAwesomeIcon
-                      className={`${styles.icon}`}
-                      icon={faVideo}
-                    />
-                  )}
-                </label>
-              </div>
+                  {isProcessing ? "Processing..." : "Upload"}
+                </button>
+              </form>
             </div>
-            {statusMessage && (
-              <StatusMessage error={error}>
-                {statusMessage}
-              </StatusMessage>
-            )}
-            {(isProcessing && uploadProgress > 0) && (
-              <ProgressBar>
-                <ProgressFill progress={uploadProgress} />
-              </ProgressBar>
-            )}
-            {/* ... (form remains the same) */}
-            <form className={styles.form}>
-              <div style={{ position: "relative" }}>
-                <FontAwesomeIcon
-                  icon={faUser}
-                  style={{
-                    position: "absolute",
-                    left: "12px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#666",
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Tag People"
-                  className={styles.input}
-                  style={{ paddingLeft: "2.5rem" }}
-                  value={formValues.tags}
-                  onChange={(e) => {
-                    setFormValues((prev) => ({
-                      ...prev,
-                      tags: e.target.value,
-                    }));
-                  }}
-                />
-              </div>
-              <div style={{ position: "relative" }}>
-                <FontAwesomeIcon
-                  icon={faUser}
-                  style={{
-                    position: "absolute",
-                    left: "12px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#666",
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Title"
-                  className={styles.input}
-                  style={{ paddingLeft: "2.5rem" }}
-                  value={formValues.title}
-                  onChange={(e) => {
-                    setFormValues((prev) => ({
-                      ...prev,
-                      title: e.target.value,
-                    }));
-                  }}
-                />
-              </div>
-              <div style={{ position: "relative" }}>
-                <FontAwesomeIcon
-                  icon={faCalendar}
-                  style={{
-                    position: "absolute",
-                    left: "12px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#666",
-                  }}
-                />
-                <input
-                  type="date"
-                  placeholder="Date"
-                  className={styles.input}
-                  style={{ paddingLeft: "2.5rem" }}
-                  value={formValues.date}
-                  onChange={(e) => {
-                    setFormValues((prev) => ({
-                      ...prev,
-                      date: e.target.value,
-                    }));
-                  }}
-                />
-              </div>
-              <div className={styles.row}>
-                <div style={{ position: "relative" }}>
-                  <FontAwesomeIcon
-                    icon={faLocationDot}
-                    style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "#666",
-                    }}
-                  />
-                  <select
-                    className={styles.select}
-                    style={{ paddingLeft: "2.5rem" }}
-                    value={formValues.city}
-                    onChange={(e) => {
-                      setFormValues((prev) => ({
-                        ...prev,
-                        city: e.target.value,
-                      }));
-                    }}
-                  >
-                    {/* ... (city options remain the same) */}
-                    <option value=""> City </option>
-                    <option value="Cairo"> Cairo </option>
-                    <option value="Alexandria"> Alexandria </option>
-                    <option value="Giza"> Giza </option>
-                    <option value="Shubra El Kheima"> Shubra El Kheima </option>
-                    <option value="Port Said"> Port Said </option>
-                    <option value="Suez"> Suez </option>
-                    <option value="Mansoura"> Mansoura </option>
-                    <option value="Mahalla"> Mahalla </option>
-                    <option value="Tanta"> Tanta </option>
-                    <option value="Asyut"> Asyut </option>
-                    <option value="Ismailia"> Ismailia </option>
-                    <option value="Faiyum"> Faiyum </option>
-                    <option value="Zagazig"> Zagazig </option>
-                    <option value="Damietta"> Damietta </option>
-                    <option value="Aswan"> Aswan </option>
-                    <option value="Minya"> Minya </option>
-                    <option value="Damanhur"> Damanhur </option>
-                    <option value="Beni Suef"> Beni Suef </option>
-                    <option value="Qena"> Qena </option>
-                    <option value="Sohag"> Sohag </option>
-                    <option value="Hurghada"> Hurghada </option>
-                    <option value="6th of October City"> 6th of October City </option>
-                    <option value="Shibin El Kom"> Shibin El Kom </option>
-                    <option value="Banha"> Banha </option>
-                    <option value="Kafr El Sheikh"> Kafr El Sheikh </option>
-                    <option value="Arish"> Arish </option>
-                    <option value="Mallawi"> Mallawi </option>
-                    <option value="10th of Ramadan City"> 10th of Ramadan City </option>
-                    <option value="Bilbais"> Bilbais </option>
-                    <option value="Marsa Matruh"> Marsa Matruh </option>
-                    <option value="Idfu"> Idfu </option>
-                    <option value="Mit Ghamr"> Mit Ghamr </option>
-                    <option value="Al-Hamidiyya"> Al-Hamidiyya </option>
-                    <option value="Desouk"> Desouk </option>
-                    <option value="Qalyub"> Qalyub </option>
-                    <option value="Abu Kabir"> Abu Kabir </option>
-                    <option value="Kafr el-Dawwar"> Kafr el-Dawwar </option>
-                    <option value="Girga"> Girga </option>
-                    <option value="Akhmim"> Akhmim </option>
-                    <option value="Matareya"> Matareya </option>
-                    <option value="Manfalut"> Manfalut </option>
-                    <option value="Qaha"> Qaha </option>
-                    <option value="New Cairo"> New Cairo </option>
-                  </select>
-                </div>
-                <div style={{ position: "relative" }}>
-                  <FontAwesomeIcon
-                    icon={faSmile}
-                    style={{
-                      position: "absolute",
-                      left: "12px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "#666",
-                    }}
-                  />
-                  <select
-                    className={styles.select}
-                    style={{ paddingLeft: "2.5rem" }}
-                    value={formValues.feelings}
-                    onChange={(e) => {
-                      setFormValues((prev) => ({
-                        ...prev,
-                        feelings: e.target.value,
-                      }));
-                    }}
-                  >
-                    <option value=""> Feeling </option>
-                    <option value="happy"> Happy </option>
-                    <option value="sad"> Sad </option>
-                  </select>
-                </div>
-              </div>
-              <div style={{ position: "relative" }}>
-                <FontAwesomeIcon
-                  icon={faFilePen}
-                  style={{
-                    position: "absolute",
-                    left: "12px",
-                    top: "27px",
-                    color: "#666",
-                  }}
-                />
-                <textarea
-                  placeholder="Notes"
-                  className={styles.textarea}
-                  style={{ paddingLeft: "2.5rem" }}
-                  value={formValues.notes}
-                  onChange={(e) => {
-                    setFormValues((prev) => ({
-                      ...prev,
-                      notes: e.target.value,
-                    }));
-                  }}
-                ></textarea>
-              </div>
-              <button
-                onClick={handleUpload}
-                disabled={!selectedFile || isProcessing}
-                type="submit"
-                className={styles.button}
-                style={{
-                  opacity: (!selectedFile || isProcessing) ? 0.6 : 1,
-                }}
-              >
-                {isProcessing ? 'Processing...' : 'Upload'}
-              </button>
-            </form>
           </div>
         </div>
       </div>
